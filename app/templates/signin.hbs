@@ -1,0 +1,37 @@
+<form class="uk-position-top-center" {{action 'login' loginId loginPassword on='submit'}}>
+  <img class="uk-margin-bottom uk-align-center" width="140" height="120" src="/images/9ple BI_0607.png" alt="9ple logo">
+  <fieldset class="uk-fieldset">
+      <div class="uk-box-shadow-medium uk-padding">
+      <legend class="uk-legend">Sign In</legend>
+      <div class="uk-margin">
+        <div class="uk-form-label">Email</div>
+        <div class="uk-inline uk-width-1-1">
+          <span class="uk-form-icon" uk-icon="icon: mail"></span>
+          {{input class="uk-input" type="email" value=loginId placeholder="Email"}}
+        </div>
+      </div>
+      <div class="uk-margin">
+        <div class="uk-form-label">Password</div>
+        <div class="uk-inline uk-width-1-1">
+          <span class="uk-form-icon" uk-icon="icon: lock"></span>
+          {{input class="uk-input" type="password" value=loginPassword placeholder="Password"}}
+        </div>
+      </div>
+      <div class="uk-margin uk-text-center">
+        {{#unless showLoading}}
+          <button class="uk-button uk-button-default uk-width-1-1">SIGN IN</button>
+        {{else}}
+          <button class="uk-button uk-button-default uk-width-1-1" disabled>
+            <div uk-spinner></div>
+          </button>
+        {{/unless}}
+      </div>
+      <h5 class="uk-heading-line uk-text-center"><span>New 9ple Account?</span></h5>
+      <div class="uk-margin uk-text-center">
+        <div class="uk-container">
+          <label>SIGN UP CLICK <a class="uk-link" href="signup">REGISTER</a></label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>

@@ -1,0 +1,50 @@
+<img class="uk-margin-bottom uk-margin-top uk-align-center" width="140" height="120" src="/images/9ple BI_0607.png" alt="9ple logo">
+<div class="uk-margin-medium-top">
+  <ul class="uk-child-width-expand" uk-tab>
+    {{#link-to 'cart' tagName="li" activeClass="uk-active"}}
+      <a>cart</a>
+    {{/link-to}}
+    {{#link-to 'checkout' tagName="li" activeClass="uk-active"}}
+      <a>checkout</a>
+    {{/link-to}}
+    {{#link-to 'order' tagName="li" activeClass="uk-active"}}
+      <a>order</a>
+    {{/link-to}}
+  </ul>
+</div>
+<div class="uk-text-bold uk-text-center uk-text-lead uk-margin-bottom">Order</div>
+<div uk-grid>
+  <div class="uk-width-1-4">  
+    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+      <h4 class="uk-card-title uk-margin-small-bottom uk-margin-small-top">Your orders</h4>
+      <hr class="uk-divider-icon uk-margin-small-bottom uk-margin-small-top">
+      <div class="uk-overflow-auto uk-height-max-large	">
+        <table class="uk-table uk-table-small uk-table-striped uk-table-divider uk-table-hover">
+          <thead>
+            <tr>
+              <th class="uk-width-small">Order<br>date</th>
+              <th>Order status</th>
+            </tr>  
+          </thead>
+          <tbody class="uk-text-small">
+            <tr>
+              <td>2017-11-24 11:45</td>
+              <td>Shipping</td>
+            </tr>
+            <tr>
+              <td>Table Data</td>
+              <td>Table Data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="uk-width-3-4">
+    <div class="uk-text-lead">order</div>
+    <div class="uk-box-shadow-small uk-padding-small">
+      <h4 class="uk-card-title">data</h4>
+      data
+    </div>
+  </div>
+</div>

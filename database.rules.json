@@ -1,0 +1,23 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "users": {
+      ".indexOn": [
+        "auth/displayName"
+      ]
+    },
+    "topDeals": {
+      ".read": "true"
+    },
+    "blogs": {
+      ".read": "true"
+    },
+    "requests": {
+      ".read": "true"
+    },
+    "cartItems": {
+      ".read": "true"
+    }
+  }
+}

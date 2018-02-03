@@ -1,0 +1,54 @@
+<form class="uk-position-top-center" {{action 'signUp' newName newEmail newPassword reEnterPassword on='submit'}}>
+  <img class="uk-margin-bottom uk-align-center" width="140" height="120" src="/images/9ple BI_0607.png" alt="9ple logo">
+  <fieldset class="uk-fieldset">
+      <div class="uk-box-shadow-medium uk-padding">
+      <legend class="uk-legend">Create Account</legend>
+      <div class="uk-margin">
+        <div class="uk-form-label">Name</div>
+        <div class="uk-inline uk-width-1-1">
+          <span class="uk-form-icon" uk-icon="icon: user"></span>
+          {{input class="uk-input" type="text" value=newName}}
+        </div>
+      </div>
+      <div class="uk-margin">
+        <div class="uk-form-label">Email</div>
+        <div class="uk-inline uk-width-1-1">
+          <span class="uk-form-icon" uk-icon="icon: mail"></span>
+          {{input class="uk-input" type="email" value=newEmail}}
+        </div>
+      </div>
+      <div class="uk-margin">
+        <div class="uk-form-label">Password</div>
+        <div class="uk-inline uk-width-1-1">
+          <span class="uk-form-icon" uk-icon="icon: lock"></span>
+          {{input class="uk-input" type="password" value=newPassword}}
+        </div>
+      </div>
+      <div class="uk-margin">
+        <div class="uk-form-label">Re-enter Password</div>
+        <div class="uk-inline uk-width-1-1">
+          <span class="uk-form-icon" uk-icon="icon: check"></span>
+          {{input class="uk-input" type="password" value=reEnterPassword}}
+        </div>
+      </div>
+      <div class="uk-margin uk-text-center">
+        {{#unless showLoading}}
+          <button class="uk-button uk-button-default uk-width-1-1">CREATE 9PLE ACCOUNT</button>
+        {{else}}
+          <button class="uk-button uk-button-default uk-width-1-1" disabled>
+            <div uk-spinner></div>
+          </button>
+        {{/unless}}
+      </div>
+      <hr class="uk-divider-icon">
+      <div class="uk-margin">
+        <div class="uk-container">
+          <label>
+            Already have an account? 
+            <a class="uk-link" href="signin">Sign IN <span uk-icon="icon: triangle-right"></span></a>
+          </label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>
