@@ -1,17 +1,48 @@
 import Route from '@ember/routing/route';
 import { action } from 'ember-decorators/object';
 
+function extractOrGetUserToken(response) {
+  const user = this.get('session.currentUser');
+  if (user.get('anetUserToken') === null) {
+    user.set('anetUserToken', response.customerProfileId);
+  }
+  return user.save();
+}
+function createPaymentProfile(anetUrl,requestData) {
+  const user = this.get('session.currentUser');
+  requestData.customerProfileId = user.get('anetUserToken');
+  return Ember.$.ajax({
+    type: "POST",
+    url: anetUrl + "payment/",
+    data: requestData,
+    success: function(data){
+      console.log(data);
+    }
+  });
+}
+
 export default Route.extend({
   model() {
+    const postUrl = "https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-getPayment/";
     const user = this.get('session.currentUser');
     const shippings = user.get('shippingAddresses');
     const cart = user.get('cart');
+    const items = cart.then(cart => cart.get('metaCartItems'));
+    const anetToken = user.get('anetUserToken');
+    const payments = Ember.$.post(postUrl+"?customerProfileId="+anetToken).then(customer => {
+      return customer.profile.paymentProfiles;
+    }).catch(() => { return false; });    
     return Ember.RSVP.hash({
-      user, shippings, cart
+      user, shippings, cart, payments, items
     });
   },
+  updatePaymentsList() {
+    const user = this.get('session.currentUser');
+    const postUrl = "https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-getPayment/";
+    const anetToken = user.get('anetUserToken');
+    return Ember.$.post(postUrl+"?customerProfileId="+anetToken);
+  },
   @action inputPayment() {
-    console.log("inputPayment");
     this.controller.set('inputPaymentView', true);
   },
   @action inputAddress() {
@@ -23,66 +54,134 @@ export default Route.extend({
   @action inputAddressClose() {
     this.controller.set('inputAddressView', false);
   },
-  @action createPayment(number, cvc, zipcode, name, month, year) {
-    console.log("createPayment");
+  @action createPayment(cardNumber, cardCode, zip, cardholder, expiration_month, expiration_year) {
+    if (Ember.isEmpty(cardNumber)) { return alert('Enter cardNumber.'); }
+    if (Ember.isEmpty(cardCode)) { return alert('Enter CVC.'); }
+    if (Ember.isEmpty(zip)) { return alert('Enter zipcode.'); }
+    if (Ember.isEmpty(cardholder)) { return alert('Enter cardholder.'); }
+    if (Ember.isEmpty(expiration_month)) { return alert('Enter month.'); }
+    if (Ember.isEmpty(expiration_year)) { return alert('Enter year.'); }
+    this.controller.set('paymentSaveLoading', true);
+    const model = this.currentModel;
+    const user = this.get('session.currentUser');
+    let errorCheck;
+    let anetUrl = 'https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-';
+    let requestData = { cardNumber, cardCode, zip, cardholder, expiration_month, expiration_year };
+    const merchantCustomerId = user.get('id').slice(0,20);
+    return Ember.$.post(anetUrl + 'customer/'+"?merchantCustomerId="+merchantCustomerId)
+      .then(extractOrGetUserToken.bind(this))
+      .then(createPaymentProfile.bind(this, anetUrl, requestData))
+      .then(response => {
+        errorCheck = response
+        return this.updatePaymentsList().then(response => {
+          return this.controller.set('model.payments', response.profile.paymentProfiles);
+        });
+      })
+      .then(() => {
+        if (errorCheck.messages.resultCode !== "Ok") { 
+          alert("error");
+        }
+        alert("save success");
+        this.controller.set('paymentSaveLoading', false);
+        this.controller.set('inputPaymentView', false);
+        this.controller.set('payment', model.payments.get('firstObject'));
+        console.log(errorCheck);
+      });
   },
   @action createAddress(firstName, lastName, street1, street2, city, state, zipcode, country, phoneNumber) {
-    console.log("createAddress");
-    // let newShippingAddress;
-    // let user = this.session.currentUser;
-    // let sessionUser;
-    // let sessionUserShippingAddresses;    
-    // let shippingAddressObj = {
-    //   user: user,
-    //   firstname: firstName,
-    //   lastname: lastName,
-    //   address1: street1,
-    //   address2: street2,
-    //   city: city,
-    //   country: country,
-    //   phonenumber: phoneNumber,
-    //   state: state,
-    //   zipcode: zipcode
-    // };
-    let user = this.session.currentUser;
-    let shippingAddressObj = { firstName, lastName, street1, street2, city, state, zipcode, country, phoneNumber };
+    if (Ember.isEmpty(firstName)) { return alert('Please type your firstName.'); }
+    if (Ember.isEmpty(lastName)) { return alert('Please type your lastName.'); }
+    if (Ember.isEmpty(street1)) { return alert('Please type your street1.'); }
+    if (Ember.isEmpty(city)) { return alert('Please type your city.'); }
+    if (Ember.isEmpty(state)) { return alert('Please type your state.'); }
+    if (Ember.isEmpty(zipcode)) { return alert('Please type your zipcode.'); }
+    if (Ember.isEmpty(country)) { return alert('Please type your country.'); }
+    if (Ember.isEmpty(phoneNumber)) { return alert('Please type your phoneNumber.'); }
+    const user = this.get('session.currentUser');
+    const model = this.currentModel;    
+    const shippingAddressObj = {
+      user: user,
+      firstname: firstName,
+      lastname: lastName,
+      address1: street1,
+      address2: street2,
+      city: city,
+      country: country,
+      phonenumber: phoneNumber,
+      state: state,
+      zipcode: zipcode
+    };
     this.get('store').createRecord('shippingAddress', shippingAddressObj).save().then(addr => {
-      //user.get('shippingAddresses').pushObject(addr);
-      //return user.save();
-    }).then(res => {
-      debugger;
+      user.get('shippingAddresses').pushObject(addr);
+      return user.save();
+    }).then(() => {
+      alert("save success");
+      this.controller.set('inputAddressView', false);
+      this.controller.set('shipping', model.shippings.get('lastObject'));
     })
-    // this.get('store').createRecord('shippingAddress', shippingAddressObj).save().then(res => {
-    //   return res
-    // }).then(res => {
-    //   sessionUserShippingAddresses = user.get('shippingAddresses');
-    //   sessionUserShippingAddresses.pushObject(res);
-    //   return user.save();
-    // }).then(res => {
-    //   return sessionUserShippingAddresses.get('currentState.lastObject.id');
-    // }).then(res => {
-    //   return this.get('store').findRecord('shippingAddress', res);
-    // }).then(res => {
-    //   return user.set('selectedShippingAddress', res);
-    // }).then(res => {
-    //   return user.save();
-    // }).then(res => {
-    //   console.log("create");
-    // })
   },
   @action deletePayment() {
-    console.log("delete");
+    this.controller.set('paymentDeleteLoading', true);
+    const user = this.get('session.currentUser');
+    let payment = this.controller.get('payment');
+    const postUrl = 'https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-deletePayment/';
+    const anetPaymentId = payment.customerPaymentProfileId;
+    const anetToken = user.get('anetUserToken');
+    Ember.$.post(postUrl +"?customerProfileId="+anetToken+"&customerPaymentProfileId="+anetPaymentId).then(res => {
+      if (res.messages.resultCode === 'Ok') {
+        return this.updatePaymentsList();
+      }    
+    }).then(response => {
+      this.controller.set('model.payments', response.profile.paymentProfiles);
+      this.controller.set('paymentDeleteLoading', false);
+      alert("Deleted.");
+    })
   },
   @action deleteAddress() {
-    console.log("delete");
+    const user = this.get('session.currentUser');
+    let address = this.controller.get('shipping');
+    address.destroyRecord().then(() => {
+      user.get('shippingAddresses').removeObject(address);
+      user.save();
+    });
   },
-  @action requestOrder() {
-    console.log('requestOrder');
-    
-    // this.session.redirectUserTo('reflex-page.order');
+  @action requestOrder(model) {
+    const paymentProfile = this.controller.get('payment');
+    const shipping = this.controller.get('shipping').toJSON();
+    const metaCartItems = model.items.map(i => i.toJSON());
+    const user = this.get('session.currentUser');
+    const cart = model.cart;
+    const email = this.currentModel.user.get('auth.email');
+    const fullName = this.currentModel.user.get('fullName');
+    const debug = false;
+    delete shipping.createdAt;
+    delete shipping.user;
+    const requestObj = {
+      user: user,
+      paymentProfile: paymentProfile,
+      shipping: shipping,
+      metaCartItems: metaCartItems,
+      email: email,
+      fullName: fullName,
+      debug: debug
+    };
+    this.get('store').createRecord('request', requestObj).save().then(addr => {
+      user.get('requests').pushObject(addr);
+      return user.save();
+    }).then(() => {
+      cart.get('metaCartItems').removeObjects(model.items.toArray());
+      cart.save().then(c => {
+        return model.items.map(i => i.destroyRecord());
+      })
+    }).then(res => {
+      this.session.redirectUserTo('order');
+    });
   },
   setupController(controller, model) {
     this._super(...arguments);
+    if (model.payments) {
+      controller.set('payment', model.payments.get('firstObject'));
+    }
     controller.set('shipping', model.shippings.get('firstObject'));
   }
 });

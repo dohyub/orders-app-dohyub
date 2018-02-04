@@ -35,7 +35,7 @@ export default class extends Service {
       return user.save();
     }).then(user => {
       // user.ref().child('online').onDisconnect().set(null);
-      user.set('auth', auth);
+      user.set('auth', auth.toJSON());
       this.set('currentUser', user);
       return user;
     });

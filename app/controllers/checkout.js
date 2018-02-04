@@ -11,10 +11,10 @@ export default Controller.extend({
   @computed('totalItemPrice') fmtTotalItemPrice(p) {
     return p.toFixed(2);
   },
-  @action selectPayment() {
-    this.set('selectedPayment',true); 
+  @action setPayment(p) {
+    this.set('payment', p);
   },
   @action setShipping(s) {
     this.set('shipping', s);
-  },
+  }
 });
