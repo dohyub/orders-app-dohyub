@@ -29,7 +29,22 @@ export default Route.extend({
       alert("save success");
     })
   },
+  @action addToCart(item) {
+    let select = item.get('selectedItem');
+    if (select === false) {
+      item.set('selectedItem', true);
+    } else {
+      item.set('selectedItem', false);
+    }
+    item.save();
+  },
   @action toCheckout() {
-    this.session.redirectUserTo('checkout');
+    let metaCartItems = this.currentModel.get('metaCartItems');
+    let cartItemCount = metaCartItems.filterBy('selectedItem',true).length;
+    if (cartItemCount === 0) {
+      UIkit.modal('#modal-add-cart').show();  
+    } else {
+      this.session.redirectUserTo('checkout');
+    }
   },
 });

@@ -148,7 +148,9 @@ export default Route.extend({
   @action requestOrder(model) {
     const paymentProfile = this.controller.get('payment');
     const shipping = this.controller.get('shipping').toJSON();
-    const metaCartItems = model.items.map(i => i.toJSON());
+    // const metaCartItems = model.items.map(i => i.toJSON());
+    const selectedItems = model.items.filterBy('selectedItem',true);
+    const metaCartItems = selectedItems.map(i => i.toJSON());
     const user = this.get('session.currentUser');
     const cart = model.cart;
     const email = this.currentModel.user.get('auth.email');
@@ -169,9 +171,9 @@ export default Route.extend({
       user.get('requests').pushObject(addr);
       return user.save();
     }).then(() => {
-      cart.get('metaCartItems').removeObjects(model.items.toArray());
+      cart.get('metaCartItems').removeObjects(selectedItems.toArray());
       cart.save().then(c => {
-        return model.items.map(i => i.destroyRecord());
+        return selectedItems.map(i => i.destroyRecord());
       })
     }).then(res => {
       this.session.redirectUserTo('order');
