@@ -13,52 +13,101 @@
 <div class="uk-text-bold uk-text-center uk-text-lead uk-margin-bottom">Cart</div>
 <div uk-grid>
   <div class="uk-width-3-5">
-    <div class="uk-box-shadow-small uk-padding-small">
+    <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small">
       <span class="uk-text-lead">Cart items</span>
+      <hr>
       {{#with session.currentUser.cart as |cart|}}
       {{#each cart.metaCartItems as |item|}}
-        <div class="uk-grid-small" uk-grid>
-          <div class="uk-width-auto">
-            <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
-            <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
-          </div>
-          <div class="uk-width-expand">
-            <a href={{item.linkToMarket}} target="_blank">
-              <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
-            </a>
-            <div class="uk-grid-small" uk-grid>
-              <div class="uk-width-auto">
-                <b>By {{item.manufacturer}}</b>  
-              </div>
-              <div class="uk-width-expand uk-text-right" uk-grid>
-                <div class="uk-width-1-2">
-                  <span>Quantity: {{item.quantity}}</span>
-                  <a {{action 'minus' item}} class="uk-text-danger" uk-icon="icon: minus-circle"></a>
-                  <a {{action 'plus' item}} class="uk-text-primary" uk-icon="icon: plus-circle"></a>
-                </div>
-                <div class="uk-width-1-2">
-                  <span class="uk-text-bold">${{item.totalPrice}}</span>
-                </div>
-              </div>            
+        {{#if item.selectedItem}}
+          <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-auto">
+              <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
+              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
             </div>
-            <form {{action 'saveOption' item on='submit'}}>
-              {{input class="uk-input uk-width-medium" type="text" value=item.option placeholder="option"}}
-              <button class="uk-button uk-button-default">save</button>
-            </form>
-            <span class="uk-text-meta">Please choose when you have options</span>
-          </div>
-          <div class="uk-width-auto uk-margin-medium-top">
-            <a {{action 'showDeleteModal' cart item}} href="#modal-item-delete" uk-toggle uk-icon="icon: close"></a>
-          </div>
-        </div>      
+            <div class="uk-width-expand">
+              <div class="uk-grid-small" uk-grid>
+                <div class="uk-width-expand">
+                  <a href={{item.linkToMarket}} target="_blank">
+                    <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+                  </a>
+                </div>
+                <div class="uk-width-auto">
+                  <button {{action 'addToCart' item}} type="button" uk-close></button>
+                </div>
+              </div>
+              <div class="uk-grid-small" uk-grid>
+                <div class="uk-width-auto">
+                  <b>By {{item.manufacturer}}</b>  
+                </div>
+                <div class="uk-width-expand uk-text-right" uk-grid>
+                  <div class="uk-width-1-2">
+                    <span>Quantity: {{item.quantity}}</span>
+                    <a {{action 'minus' item}} class="uk-text-danger" uk-icon="icon: minus-circle"></a>
+                    <a {{action 'plus' item}} class="uk-text-primary" uk-icon="icon: plus-circle"></a>
+                  </div>
+                  <div class="uk-width-1-2">
+                    <span class="uk-text-bold">${{item.totalPrice}}</span>
+                  </div>
+                </div>            
+              </div>
+              <div>
+                <form {{action 'saveOption' item on='submit'}}>
+                  {{input class="uk-input uk-width-medium" type="text" value=item.option placeholder="option"}}
+                  <button class="uk-button uk-button-default">save</button>
+                </form>
+                <span class="uk-text-meta">Please choose when you have options</span>
+              </div>
+            </div>
+          </div>      
+          <hr>
+        {{/if}}
+      {{/each}}
+      {{/with}}    
+    </div>
+    <h3 class="uk-heading-line uk-text-center"><span>Your Favorites</span></h3>
+    <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small">
+      <span class="uk-text-lead">Favorite items</span>
+      <span class="uk-text-meta uk-text-center">Please put the product in the cart.</span>
+      <hr>
+      {{#with session.currentUser.cart as |cart|}}
+      {{#each cart.metaCartItems as |item|}}
+        {{#unless item.selectedItem}}
+          <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-auto">
+              <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
+              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
+            </div>
+            <div class="uk-width-expand">
+              <a href={{item.linkToMarket}} target="_blank">
+                <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+              </a>
+              <div class="uk-grid-small" uk-grid>
+                <div class="uk-width-auto">
+                  <b>By {{item.manufacturer}}</b>  
+                </div>        
+              </div>          
+            </div>
+            <div class="uk-width-auto uk-text-small">
+              <div class="uk-align-top uk-margin-small-bottom">
+                <button {{action 'showDeleteModal' cart item}} class="uk-button uk-button-text uk-text-danger" href="#modal-item-delete" uk-toggle>
+                  delete
+                </button>
+              </div>
+              <div class="uk-align-middle uk-margin-small-top">
+                <button {{action 'addToCart' item}} class="uk-button uk-button-text">select</button>
+              </div>        
+            </div>
+          </div>      
+          <hr>
+        {{/unless}}
       {{/each}}
       {{/with}}
     </div>
   </div>
   <div class="uk-width-2-5">
-    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
-      <h4 class="uk-card-title">Total {{totalItemCount}} item(s):</h4>
-      <hr class="uk-divider-icon uk-margin-small-bottom">
+    <div style="border: 1px solid #E6E6E6;" class="uk-card uk-card-default uk-card-body uk-padding-small">
+      <h4 class="uk-card-title">Total {{selectedItemsCount}} item(s):</h4>
+      <hr>
       <h5 class="uk-text-bold uk-text-right uk-margin-small-top">${{fmtTotalItemPrice}}</h5>
       {{#if session.currentUser.cart.metaCartItems}}
         <button {{action 'toCheckout'}} class="uk-button uk-button-primary uk-width-1-1">Proceed to checkout</button>
@@ -75,6 +124,15 @@
     <p class="uk-text-center">
       <button {{action 'deleteItem' cart item}} class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>
       <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>          
+    </p>
+  </div>
+</div>
+<div id="modal-add-cart" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+    <h2 class="uk-modal-title">Notice</h2>
+    <p>Please put items into cart.</p>
+    <p class="uk-text-center">
+      <button class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>      
     </p>
   </div>
 </div>

@@ -13,9 +13,10 @@
 <div class="uk-text-bold uk-text-center uk-text-lead uk-margin-bottom">Checkout</div>
 <div uk-grid>
   <div class="uk-width-3-5">
-    <div class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
+    <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
       <span class="uk-text-lead">Payment Information</span>
       <a {{action 'inputPayment'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+      <hr>
       <ul uk-accordion>
         {{#each model.payments as |p|}}
           {{#with p.payment.creditCard as |cc|}}
@@ -24,11 +25,12 @@
               <div class="uk-accordion-content" uk-grid>
                 <p class="uk-width-4-5">{{p.billTo.firstName}}</p>
                 {{#unless paymentDeleteLoading}}
-                  <a class="uk-width-1-5" href="#modal-payment-delete" uk-toggle uk-icon="icon: close"></a>      
+                  <button class="uk-button uk-button-text uk-text-danger" href="#modal-payment-delete" uk-toggle>delete</button>      
                 {{else}}
                   <div uk-spinner></div>
                 {{/unless}}
               </div>
+              <hr>
             </li>
           {{/with}}
         {{/each}}
@@ -75,17 +77,20 @@
       {{/if}}
     </div>
 
-    <div class="uk-box-shadow-small uk-padding-small">
+    <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small">
       <span class="uk-text-lead">Shipping Address</span>
       <a {{action 'inputAddress'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+      <hr>
       <ul uk-accordion>
         {{#each model.shippings as |address|}}
           <li class={{if (eq address shipping) 'uk-open'}} {{action 'setShipping' address}}>
             <a class="uk-accordion-title" href="#">{{address.fullName}}</a>
             <div class="uk-accordion-content" uk-grid>
               <p class="uk-width-4-5">{{address.fullAddress}}</p>
-              <a class="uk-width-1-5" href="#modal-address-delete" uk-toggle uk-icon="icon: close"></a>
+              <!-- <a class="uk-width-1-5" href="#modal-address-delete" uk-toggle uk-icon="icon: close"></a> -->
+              <button class="uk-button uk-button-text uk-text-danger" href="#modal-address-delete" uk-toggle>delete</button>   
             </div>
+            <hr>
           </li>
         {{/each}}
       </ul>
@@ -140,48 +145,67 @@
         </form>
       {{/if}}
     </div>    
-    <hr class="uk-divider-icon">
-    <div class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
+    <hr>
+    <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
       <span class="uk-text-lead">Review Items</span>
+      <hr>
       {{#with session.currentUser.cart as |cart|}}
       {{#each cart.metaCartItems as |item|}}
-        <div class="uk-grid-small" uk-grid>
-          <div class="uk-width-auto">
-            <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
-            <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
-          </div>
-          <div class="uk-width-expand">
-            <a href={{item.linkToMarket}} target="_blank">
-              <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
-            </a>
-            <div class="uk-grid-small" uk-grid>
-              <div class="uk-width-auto">
-                <b>By {{item.manufacturer}}</b>  
-              </div>
-              <div class="uk-width-expand uk-text-right" uk-grid>
-                <div class="uk-width-1-2">
-                  <span>Quantity: {{item.quantity}}</span>
-                </div>
-                <div class="uk-width-1-2">
-                  <span class="uk-text-bold">${{item.totalPrice}}</span>
-                </div>
-              </div>            
+        {{#if item.selectedItem}}
+          <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-auto">
+              <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
+              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
             </div>
-            <span class="uk-text-meta">{{item.option}}</span>
+            <div class="uk-width-expand">
+              <a href={{item.linkToMarket}} target="_blank">
+                <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+              </a>
+              <div class="uk-grid-small" uk-grid>
+                <div class="uk-width-auto">
+                  <b>By {{item.manufacturer}}</b>  
+                </div>
+                <div class="uk-width-expand uk-text-right" uk-grid>
+                  <div class="uk-width-1-2">
+                    <span>Quantity: {{item.quantity}}</span>
+                  </div>
+                  <div class="uk-width-1-2">
+                    <span class="uk-text-bold">${{item.totalPrice}}</span>
+                  </div>
+                </div>            
+              </div>
+              <span class="uk-text-meta">{{item.option}}</span>
+            </div>
           </div>
-        </div>
+          <hr>
+        {{/if}}
       {{/each}}
       {{/with}}      
     </div>
   </div>
   <div class="uk-width-2-5">
-    <div class="uk-card uk-card-default uk-card-body uk-padding-small">
+    <div style="border: 1px solid #E6E6E6;" class="uk-card uk-card-default uk-card-body uk-padding-small">
       <h4 class="uk-card-title uk-margin-small-bottom">Markets will charge this amount.</h4>  
-      <hr class="uk-divider-icon uk-margin-small-bottom uk-margin-small-top">
+      <hr>
+      <div class="uk-text-meta">
+        The total cost of your purchase will include:<br>
+        1. Item subtotal<br>
+        2. Local shipping fee<br>
+        3. Local tax<br>
+        4. International shipping fee.<br><br>
+        The Local shipping fee and Local tax cannot currently be displayed and will be calculated after your order is placed at our affiliate sites.<br><br>
+        Local shipping fees will occur for purchases less than:<br>
+        US $25 at Amazon and<br>
+        US $35 at Walmart.<br>
+        {{#unless isAllShippable}}
+          <br>Some items lack sufficient information to estimate international shipping fees. Your international shipping fee will be finalized once the freight forwarder receives your package.
+        {{/unless}}
+      </div>
+      <hr>
       <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-2">
           <div class="">
-            <span class="uk-text-small">Item Total ({{totalItemCount}}):</span>
+            <span class="uk-text-small">Item Total ({{selectedItemsCount}}):</span>
           </div>
           <div class="">
             <span class="uk-text-small">Local Tax:</span>
@@ -202,20 +226,26 @@
           </div>
         </div>
       </div>
-      <hr class="uk-divider-icon uk-margin-small-bottom uk-margin-small-top">
+      <hr>
       <div class="uk-grid-small" uk-grid>
         <div class="uk-width-1-2">
           <div class="">
             <span class="uk-text-small">International Shipping Fee:</span>
           </div>
+          {{#if isAllShippable}}
+            <div class=""><span class="uk-text-small">Estimated</span></div>
+          {{/if}}
         </div>
         <div class="uk-width-1-2">
           <div class="">
             <span class="uk-text-small">to be decided</span>
           </div>
+          {{#if isAllShippable}}
+            <div class=""><span class="uk-text-small">${{totalShippingFee}}</span></div>
+          {{/if}}
         </div>
-        <button class="uk-button uk-button-primary uk-width-1-1" href="#modal-request" uk-toggle>Make an order request</button>
       </div>
+      <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-top" href="#modal-request" uk-toggle>Make an order request</button>
     </div>
     {{#link-to 'cart'}}
       <button class="uk-button uk-button-link uk-align-right uk-margin-medium-top">Back to cart</button>

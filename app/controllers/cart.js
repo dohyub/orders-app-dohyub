@@ -3,9 +3,10 @@ import computed from '@ember-decorators/auto-computed';
 import Ember from 'ember';
 
 export default Controller.extend({
-  itemQuantities: Ember.computed.mapBy('model.metaCartItems', 'quantity'),
-  totalItemCount: Ember.computed.sum('itemQuantities'),
-  itemTotalPrices: Ember.computed.mapBy('model.metaCartItems', 'totalPrice'),
+  selectedItems: Ember.computed.filterBy('model.metaCartItems', 'selectedItem', true),
+  selectedItemQuantities: Ember.computed.mapBy('selectedItems', 'quantity'),
+  selectedItemsCount: Ember.computed.sum('selectedItemQuantities'),
+  itemTotalPrices: Ember.computed.mapBy('selectedItems', 'totalPrice'),
   totalItemPrice: Ember.computed.sum('itemTotalPrices'),
   @computed('totalItemPrice') fmtTotalItemPrice(p) {
     return p.toFixed(2);

@@ -10,5 +10,9 @@ export default Route.extend({
   @action didTransition() {
     window.r = this;
     window.c = config
+  },
+  @action signOut() {
+    this.session.redirectUserTo('signin');
+    this.session.signOut();
   }
 });

@@ -1,5 +1,5 @@
 {{#each model.metaCartItems as |item index|}}
-  <div class="uk-card uk-card-default uk-width-1-1@m">
+  <div style="border: 1px solid #E6E6E6;" class="uk-card uk-card-default uk-width-1-1@m">
     <div class="uk-grid-small uk-flex-middle" uk-grid>
       <div class="uk-width-auto">
         <img class="uk-border-circle" width="60" height="60" src="{{item.image}}">
@@ -10,7 +10,7 @@
         </a>
           <p class="uk-text-meta uk-margin-remove-top">
             By {{item.manufacturer}}
-            {{#unless reqCancel}}
+            <!-- {{#unless reqCancel}}
               <div uk-form-custom="target: > * > span:first-child">
                 <select>
                   <option value="-1">Please select...</option>
@@ -24,7 +24,7 @@
                   <span uk-icon="icon: chevron-down"></span>
                 </button>
               </div>
-            {{/unless}}
+            {{/unless}} -->
           </p>
       </div>
     </div>
@@ -189,13 +189,37 @@
     Request cancellation order
   </button>
 {{/unless}}
-<div id="modal-cancel" uk-modal>
+<div id="modal-cancel" bg-close="false" uk-modal>
   <div class="uk-modal-dialog uk-modal-body">
     <h2 class="uk-modal-title">Notice</h2>
     <p>Are you sure you wish to cancel your order? This action cannot be undone.</p>
     <p class="uk-text-center">
-      <button {{action 'requestCancel'}} class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>
+      {{#unless cancelLoading}}
+        <button {{action 'requestCancel'}} class="uk-button uk-button-primary" type="button">Ok</button>
+      {{else}}
+        <button class="uk-button uk-button-primary" type="button" disabled>
+          <div uk-spinner></div>
+        </button>
+      {{/unless}}
       <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>          
+    </p>
+  </div>
+</div>
+<div id="modal-cancel-error" bg-close="false" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+    <h2 class="uk-modal-title">Order cancellation exception</h2>
+    <p>Unable to process order (please email service@9ple.com).</p>
+    <p class="uk-text-center">
+      <button class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>       
+    </p>
+  </div>
+</div>
+<div id="modal-cancel-success" bg-close="false" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+    <h2 class="uk-modal-title">Notice</h2>
+    <p>The order has been cancelled.</p>
+    <p class="uk-text-center">
+      <button class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>       
     </p>
   </div>
 </div>

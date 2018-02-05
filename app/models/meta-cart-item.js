@@ -11,6 +11,7 @@ export default DS.Model.extend({
   productId: DS.attr('string'),
   parentId: DS.attr('string'),
   option: DS.attr('string'),
+  selectedItem: DS.attr('boolean'),
 
   market: DS.attr('string'),       // ex) amazon, walmart
   category: DS.attr('string'),     // which category in a market

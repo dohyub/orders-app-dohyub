@@ -6,11 +6,34 @@ export default Route.extend({
     return this.store.findRecord('request', params.id);
   },
   @action requestCancel() {
-    console.log("requestCancel");
+    this.controller.set('cancelLoading', true);
     const url = 'https://us-central1-npl-dev-fbbd9.cloudfunctions.net/get_moniebin';
+    const order = this.currentModel;
     const oid = order.get('id');
     const payload = { oid, aid: '9ple' };
-    // Ember.$.get(url, payload)
+    Ember.$.get(url, payload).then(({ Response: { Result, Status } }) => {
+      if(Status.TrackingNo === "") { return; }
+      else { reject(); }
+    }).then(() => {
+      order.set('reqCancel', true);
+      order.set('icon', 'yellow warning');
+      const messages=order.get('messages');
+      let message = this.store.createRecord('message', {
+        icon: 'yellow warning',
+        type: 'positive',
+        body: 'Your cancellation request has been received.'
+      });
+      messages.pushObject(message);
+      this.controller.set('cancelLoading', false);
+      UIkit.modal('#modal-cancel').hide();
+      UIkit.modal('#modal-cancel-success').show();  
+      return order.save();
+    }).catch(err => {
+      console.log(err);
+      this.controller.set('cancelLoading', false);
+      UIkit.modal('#modal-cancel').hide();
+      UIkit.modal('#modal-cancel-error').show();  
+    })
   },
   setupController(controller, model) {
     this._super(...arguments);
