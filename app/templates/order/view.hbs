@@ -1,0 +1,201 @@
+{{#each model.metaCartItems as |item index|}}
+  <div class="uk-card uk-card-default uk-width-1-1@m">
+    <div class="uk-grid-small uk-flex-middle" uk-grid>
+      <div class="uk-width-auto">
+        <img class="uk-border-circle" width="60" height="60" src="{{item.image}}">
+      </div>
+      <div class="uk-width-expand">
+        <a href="{{item.linkToMarket}}" target="_blank">
+          <p class="uk-card-title uk-margin-remove-bottom"><h4>{{item.title}}</h4></p>
+        </a>
+          <p class="uk-text-meta uk-margin-remove-top">
+            By {{item.manufacturer}}
+            {{#unless reqCancel}}
+              <div uk-form-custom="target: > * > span:first-child">
+                <select>
+                  <option value="-1">Please select...</option>
+                  <option value="1">Product OK</option>
+                  <option value="2">Out of Stock</option>
+                  <option value="3">Price Change</option>
+                  <option value="4">Local shipping cost</option>
+                </select>
+                <button class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">
+                  <span></span>
+                  <span uk-icon="icon: chevron-down"></span>
+                </button>
+              </div>
+            {{/unless}}
+          </p>
+      </div>
+    </div>
+    <table class="uk-table uk-table-small uk-text-small">
+      <thead>
+      <tr>
+        <th>Vendor</th>
+        <th>Product ID</th>
+        <th>Options</th>
+        <th>Qty</th>
+        <th>Price</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img width="60" height="60"src="/images/{{item.market}}.svg" alt="market"></td>
+          <td>{{item.productId}}</td>
+          <td>
+            {{#if item.variations}}
+              {{#with item.variations as |vs|}}
+                {{#each-in vs as |k v|}}
+                  <p>{{k}}: {{v}}</p>
+                {{/each-in}}
+              {{/with}}
+            {{else}}
+              {{item.option}}
+            {{/if}}
+          </td>
+          <td>{{item.quantity}}</td>
+          <td>${{item.price}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  
+{{/each}}
+<div class="uk-width-xlarge">
+  <table class="uk-table uk-table-small uk-text-small">
+    <thead>
+      <tr>
+        <th>Vendor</th>
+        <th>Product Price</th>
+        <th>Sales Tex</th>
+        <th>Shipping Fee</th>
+        <th>ETA Message</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each model.amazonOrderInformations as |order|}}
+        <tr>
+          <td>{{order.amazonOrderNumber}}</td>
+          <td>${{order.amazonSubTotal}}</td>
+          <td>${{order.amazonSalesTax}}</td>
+          <td>${{order.amazonShippingFee}}</td>
+          <td>{{order.amazonETA}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<div class="uk-width-xlarge">
+  <table class="uk-table uk-table-small uk-text-small">
+    <thead>
+      <tr>
+        <th>local Tracking Carrier</th>
+        <th>local Tracking Number</th>
+        <th>local Tracking URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each model.trackingInformations as |tracking|}}
+      <tr>
+        <td>{{tracking.trackingCarrier}}</td>
+        <td>{{tracking.trackingNumber}}</td>
+        <td><h5><a class="uk-link-heading" href={{tracking.trackingURL}}>Tracking Info</a></h5></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<div class="uk-card-body">
+<h4 class="uk-heading-line uk-text-center"><span>Authorization</span></h4>
+{{#each model.authorizations as |a|}}
+  <div class="uk-card uk-card-default uk-card-small uk-card-body uk-text-center">
+    <article class="uk-article">
+      {{#with a.transactionResponse as |r|}}
+        {{#if a.isCaptured}}
+          <p class="uk-text-lead"><strike>${{a.amount}}</strike></p>
+        {{else if a.isVoided}}
+          <p class="uk-text-lead"><strike>${{a.amount}}</strike></p>
+        {{else if a.amount}}
+          <p class="uk-text-lead">${{a.amount}}</p>
+        {{else}}
+          <p class="uk-text-lead">{{a.method}}</p>
+        {{/if}}
+        <div class="uk-article-meta">
+          {{simple-time a.createdAt}}
+        </div>
+        <div class="uk-margin-small">
+          <span class="uk-label uk-label-default">{{a.descriptor}} - {{r.accountType}} - {{r.accountNumber}}</span>
+        </div>
+        <div class="uk-margin-small">
+          {{#if r.errors}}
+            <span class="uk-label uk-label-danger">error</span>
+          {{/if}}
+        </div>
+        <div class="uk-article-meta">
+          {{#each r.messages as |m|}}
+            <p>{{m.description}}</p>
+          {{/each}}
+          {{#each r.errors as |e|}}
+            <p>{{e.errorText}}</p>
+          {{/each}}
+        </div>     
+      {{/with}}
+    </article>
+  </div>
+{{/each}}
+{{#unless model.authorizations.length}}
+  <div class="uk-alert-warning" uk-alert><p>No Transactions</p></div>
+{{/unless}}
+</div>
+<progress id="js-progressbar" class="uk-progress" value={{progress}} max="100"></progress>
+<h5 class="uk-heading-line uk-text-center"><span>Total Price</span></h5>
+<div class="uk-align-right uk-text-small" uk-grid>
+  <div class="uk-width-1-1@m">  
+    <table class="uk-table">
+      <thead>
+        <tr>
+          <th>Purchase Total</th>
+          <th>Internaional Shipping Fee</th>
+          <th>Total Charge</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {{#if sumTotalItemPrice}}
+            <td>${{sumTotalItemPrice}}</td>
+          {{else}}
+            <td></td>
+          {{/if}}
+          {{#if model.moniebinFeeTotal}}
+            <td>${{model.moniebinFeeTotal}}</td>
+          {{else}}
+            <td></td>
+          {{/if}}
+          {{#if totalCharge}}
+            <td>${{totalCharge}}</td>
+          {{else}}
+            <td></td>
+          {{/if}}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{{#unless model.reqCancel}}
+  <button class="uk-button uk-button-primary uk-width-large uk-align-center uk-margin-small-bottom" href="#modal-cancel" uk-toggle>
+    Request cancellation order
+  </button>
+{{else}}
+  <button class="uk-button uk-button-primary uk-width-large uk-align-center uk-margin-small-bottom" disabled>
+    Request cancellation order
+  </button>
+{{/unless}}
+<div id="modal-cancel" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+    <h2 class="uk-modal-title">Notice</h2>
+    <p>Are you sure you wish to cancel your order? This action cannot be undone.</p>
+    <p class="uk-text-center">
+      <button {{action 'requestCancel'}} class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>
+      <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>          
+    </p>
+  </div>
+</div>

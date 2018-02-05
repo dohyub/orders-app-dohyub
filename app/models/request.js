@@ -18,6 +18,7 @@ export default DS.Model.extend({
   // cart: DS.attr('object'),
   cartError: DS.attr('string'),
   estShipFee: DS.attr('number'),
+  moniebinFeeTotal: DS.attr('number'),
   fullName: DS.attr('string'),
   isManualOrder: DS.attr('boolean', { defaultValue: false }),
   isOutOfFeeTable: DS.attr('boolean', { defaultValue: false }),

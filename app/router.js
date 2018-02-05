@@ -11,7 +11,9 @@ Router.map(function() {
   this.route('signup');
   this.route('cart');
   this.route('checkout');
-  this.route('order');
+  this.route('order', function() {
+    this.route('view', { path: '/:id'});
+  });
 });
 
 export default Router;
