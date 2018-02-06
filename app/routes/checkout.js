@@ -26,6 +26,7 @@ export default Route.extend({
     const postUrl = "https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-getPayment/";
     const user = this.get('session.currentUser');
     const shippings = user.get('shippingAddresses');
+    const billings = user.get('billingAddresses');
     const cart = user.get('cart');
     const items = cart.then(cart => cart.get('metaCartItems'));
     const anetToken = user.get('anetUserToken');
@@ -33,7 +34,7 @@ export default Route.extend({
       return customer.profile.paymentProfiles;
     }).catch(() => { return false; });    
     return Ember.RSVP.hash({
-      user, shippings, cart, payments, items
+      user, shippings, cart, payments, billings, items
     });
   },
   updatePaymentsList() {
@@ -45,14 +46,20 @@ export default Route.extend({
   @action inputPayment() {
     this.controller.set('inputPaymentView', true);
   },
-  @action inputAddress() {
-    this.controller.set('inputAddressView', true);
+  @action inputShippingAddress() {
+    this.controller.set('inputShippingAddressView', true);
+  },
+  @action inputBillingAddress() {
+    this.controller.set('inputBillingAddressView', true);
   },
   @action inputPaymentClose() {
     this.controller.set('inputPaymentView', false);
   },
-  @action inputAddressClose() {
-    this.controller.set('inputAddressView', false);
+  @action inputShippingAddressClose() {
+    this.controller.set('inputShippingAddressView', false);
+  },
+  @action inputBillingAddressClose() {
+    this.controller.set('inputBillingAddressView', false);
   },
   @action createPayment(cardNumber, cardCode, zip, cardholder, expiration_month, expiration_year) {
     if (Ember.isEmpty(cardNumber)) { return alert('Enter cardNumber.'); }
@@ -88,7 +95,7 @@ export default Route.extend({
         console.log(errorCheck);
       });
   },
-  @action createAddress(firstName, lastName, street1, street2, city, state, zipcode, country, phoneNumber) {
+  @action createShippingAddress(firstName, lastName, street1, street2, city, state, zipcode, country, phoneNumber) {
     if (Ember.isEmpty(firstName)) { return alert('Please type your firstName.'); }
     if (Ember.isEmpty(lastName)) { return alert('Please type your lastName.'); }
     if (Ember.isEmpty(street1)) { return alert('Please type your street1.'); }
@@ -120,6 +127,38 @@ export default Route.extend({
       this.controller.set('shipping', model.shippings.get('lastObject'));
     })
   },
+  @action createBillingAddress(firstName, lastName, street1, street2, city, state, zipcode, country, phoneNumber) {
+    if (Ember.isEmpty(firstName)) { return alert('Please type your firstName.'); }
+    if (Ember.isEmpty(lastName)) { return alert('Please type your lastName.'); }
+    if (Ember.isEmpty(street1)) { return alert('Please type your street1.'); }
+    if (Ember.isEmpty(city)) { return alert('Please type your city.'); }
+    if (Ember.isEmpty(state)) { return alert('Please type your state.'); }
+    if (Ember.isEmpty(zipcode)) { return alert('Please type your zipcode.'); }
+    if (Ember.isEmpty(country)) { return alert('Please type your country.'); }
+    if (Ember.isEmpty(phoneNumber)) { return alert('Please type your phoneNumber.'); }
+    const user = this.get('session.currentUser');
+    const model = this.currentModel;    
+    const billingAddressObj = {
+      user: user,
+      firstname: firstName,
+      lastname: lastName,
+      address1: street1,
+      address2: street2,
+      city: city,
+      country: country,
+      phonenumber: phoneNumber,
+      state: state,
+      zipcode: zipcode
+    };
+    this.get('store').createRecord('billingAddress', billingAddressObj).save().then(addr => {
+      user.get('billingAddresses').pushObject(addr);
+      return user.save();
+    }).then(() => {
+      alert("save success");
+      this.controller.set('inputBillingAddressView', false);
+      this.controller.set('billing', model.billings.get('lastObject'));
+    })
+  },
   @action deletePayment() {
     this.controller.set('paymentDeleteLoading', true);
     const user = this.get('session.currentUser');
@@ -137,7 +176,7 @@ export default Route.extend({
       alert("Deleted.");
     })
   },
-  @action deleteAddress() {
+  @action deleteShippingAddress() {
     const user = this.get('session.currentUser');
     let address = this.controller.get('shipping');
     address.destroyRecord().then(() => {
@@ -145,9 +184,18 @@ export default Route.extend({
       user.save();
     });
   },
+  @action deleteBillingAddress() {
+    const user = this.get('session.currentUser');
+    let address = this.controller.get('billing');
+    address.destroyRecord().then(() => {
+      user.get('billingAddresses').removeObject(address);
+      user.save();
+    });
+  },
   @action requestOrder(model) {
     const paymentProfile = this.controller.get('payment');
     const shipping = this.controller.get('shipping').toJSON();
+    const billing = this.controller.get('billing').toJSON();
     // const metaCartItems = model.items.map(i => i.toJSON());
     const selectedItems = model.items.filterBy('selectedItem',true);
     const metaCartItems = selectedItems.map(i => i.toJSON());
@@ -162,6 +210,7 @@ export default Route.extend({
       user: user,
       paymentProfile: paymentProfile,
       shipping: shipping,
+      billing: billing,
       metaCartItems: metaCartItems,
       email: email,
       fullName: fullName,
@@ -185,5 +234,6 @@ export default Route.extend({
       controller.set('payment', model.payments.get('firstObject'));
     }
     controller.set('shipping', model.shippings.get('firstObject'));
+    controller.set('billing', model.billings.get('firstObject'));
   }
 });

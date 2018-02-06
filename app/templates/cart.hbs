@@ -1,122 +1,145 @@
-<img class="uk-margin-bottom uk-margin-top uk-align-center" width="140" height="120" src="/images/9ple BI_0607.png" alt="9ple logo">
-<div class="uk-margin-medium-top">
-  <ul class="uk-child-width-expand" uk-tab>
-    {{#link-to 'cart' tagName="li" activeClass="uk-active"}}
-      <a>cart</a>
-    {{/link-to}}
-    <li class="uk-disabled"><a>checkout</a></li>
-    {{#link-to 'order' tagName="li" activeClass="uk-active"}}
-      <a>order</a>
-    {{/link-to}}
-  </ul>
-</div>
-<div class="uk-text-bold uk-text-center uk-text-lead uk-margin-bottom">Cart</div>
-<div uk-grid>
-  <div class="uk-width-3-5">
-    <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small">
-      <span class="uk-text-lead">Cart items</span>
-      <hr>
-      {{#with session.currentUser.cart as |cart|}}
-      {{#each cart.metaCartItems as |item|}}
-        {{#if item.selectedItem}}
-          <div class="uk-grid-small" uk-grid>
-            <div class="uk-width-auto">
-              <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
-              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
-            </div>
-            <div class="uk-width-expand">
-              <div class="uk-grid-small" uk-grid>
-                <div class="uk-width-expand">
-                  <a href={{item.linkToMarket}} target="_blank">
-                    <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
-                  </a>
-                </div>
-                <div class="uk-width-auto">
-                  <button {{action 'addToCart' item}} type="button" uk-close></button>
-                </div>
+<header style="background-color: #2f80ed;">
+  <div class="uk-container">
+    <div class="uk-grid-small" uk-grid>
+      <div class="uk-width-auto">
+        <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo">
+      </div>
+      <div class="uk-width-expand" uk-grid>
+        <div class="uk-width-expand">
+          {{#link-to 'order' tagName="button" class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom"}}
+            Orders
+          {{/link-to}}
+        </div>
+        <div class="uk-width-auto">
+          <button {{action 'signOut'}} class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom uk-margin-small-left uk-text-success">Sign Out</button>
+        </div>
+      </div>
+    </div>  
+  </div>
+</header>
+<div class="uk-container uk-margin-xlarge-bottom">
+  <div class="uk-text-bold uk-text-center uk-text-lead uk-margin-bottom">Cart</div>
+  <div uk-grid>
+    <div class="uk-width-3-5">
+      <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small">
+        <span class="uk-text-lead">Cart items</span>
+        <hr>
+        {{#with session.currentUser.cart as |cart|}}
+        {{#each cart.metaCartItems as |item|}}
+          {{#if item.selectedItem}}
+            <div class="uk-grid-small" uk-grid>
+              <div class="uk-width-auto">
+                <img class="uk-border-rounded" width="60" height="60" src={{item.image}}>
+                <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
               </div>
-              <div class="uk-grid-small" uk-grid>
-                <div class="uk-width-auto">
-                  <b>By {{item.manufacturer}}</b>  
-                </div>
-                <div class="uk-width-expand uk-text-right" uk-grid>
-                  <div class="uk-width-1-2">
-                    <span>Quantity: {{item.quantity}}</span>
-                    <a {{action 'minus' item}} class="uk-text-danger" uk-icon="icon: minus-circle"></a>
-                    <a {{action 'plus' item}} class="uk-text-primary" uk-icon="icon: plus-circle"></a>
+              <div class="uk-width-expand">
+                <div class="uk-grid-small" uk-grid>
+                  <div class="uk-width-expand">
+                    <a href={{item.linkToMarket}} target="_blank">
+                      <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+                    </a>
                   </div>
-                  <div class="uk-width-1-2">
-                    <span class="uk-text-bold">${{item.totalPrice}}</span>
+                  <div class="uk-width-auto">
+                    <button {{action 'addToCart' item}} type="button" uk-close></button>
                   </div>
-                </div>            
+                </div>
+                <div class="uk-grid-small" uk-grid>
+                  <div class="uk-width-auto">
+                    <b>By {{item.manufacturer}}</b>  
+                  </div>
+                  <div class="uk-width-expand uk-text-right" uk-grid>
+                    <div class="uk-width-1-2">
+                      <span>Qty  :  {{item.quantity}}</span>
+                      <a {{action 'minus' item}} uk-icon="icon: minus-circle"></a>
+                      <a {{action 'plus' item}} uk-icon="icon: plus-circle"></a>
+                    </div>
+                    <div class="uk-width-1-2">
+                      <span class="uk-text-bold">${{item.totalPrice}}</span>
+                    </div>
+                  </div>            
+                </div>
+                <div>
+                  <form {{action 'saveOption' item on='submit'}}>
+                    {{input class="uk-input uk-width-medium" type="text" value=item.option placeholder="option"}}
+                    <button class="uk-button uk-button-default">update</button>
+                  </form>
+                  <span class="uk-text-meta">Please choose when you have options</span>
+                </div>
               </div>
-              <div>
-                <form {{action 'saveOption' item on='submit'}}>
-                  {{input class="uk-input uk-width-medium" type="text" value=item.option placeholder="option"}}
-                  <button class="uk-button uk-button-default">save</button>
-                </form>
-                <span class="uk-text-meta">Please choose when you have options</span>
+            </div>      
+            <hr>
+          {{/if}}
+        {{/each}}
+        {{/with}}    
+      </div>
+      <h3 class="uk-heading-line uk-text-center"><span>Your Favorites</span></h3>
+      <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small uk-margin-small-bottom">
+        <span class="uk-text-lead">Favorite items</span>
+        <span class="uk-text-meta uk-text-center">Please put the product in the cart.</span>
+        <hr>
+        {{#with session.currentUser.cart as |cart|}}
+        {{#each cart.metaCartItems as |item|}}
+          {{#unless item.selectedItem}}
+            <div class="uk-grid-small" uk-grid>
+              <div class="uk-width-auto">
+                <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
+                <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
               </div>
-            </div>
-          </div>      
-          <hr>
-        {{/if}}
-      {{/each}}
-      {{/with}}    
-    </div>
-    <h3 class="uk-heading-line uk-text-center"><span>Your Favorites</span></h3>
-    <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small">
-      <span class="uk-text-lead">Favorite items</span>
-      <span class="uk-text-meta uk-text-center">Please put the product in the cart.</span>
-      <hr>
-      {{#with session.currentUser.cart as |cart|}}
-      {{#each cart.metaCartItems as |item|}}
-        {{#unless item.selectedItem}}
-          <div class="uk-grid-small" uk-grid>
-            <div class="uk-width-auto">
-              <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
-              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
-            </div>
-            <div class="uk-width-expand">
-              <a href={{item.linkToMarket}} target="_blank">
-                <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
-              </a>
-              <div class="uk-grid-small" uk-grid>
-                <div class="uk-width-auto">
-                  <b>By {{item.manufacturer}}</b>  
+              <div class="uk-width-expand">
+                <a href={{item.linkToMarket}} target="_blank">
+                  <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+                </a>
+                <div class="uk-grid-small" uk-grid>
+                  <div class="uk-width-auto">
+                    <b>By {{item.manufacturer}}</b>  
+                  </div>        
+                </div>          
+              </div>
+              <div class="uk-width-auto uk-text-small">
+                <div class="uk-align-top uk-margin-small-bottom">
+                  <button {{action 'showDeleteModal' cart item}} class="uk-button uk-button-text uk-text-danger" href="#modal-item-delete" uk-toggle>
+                    delete
+                  </button>
+                </div>
+                <div class="uk-align-middle uk-margin-small-top">
+                  <button {{action 'addToCart' item}} class="uk-button uk-button-text">select</button>
                 </div>        
-              </div>          
-            </div>
-            <div class="uk-width-auto uk-text-small">
-              <div class="uk-align-top uk-margin-small-bottom">
-                <button {{action 'showDeleteModal' cart item}} class="uk-button uk-button-text uk-text-danger" href="#modal-item-delete" uk-toggle>
-                  delete
-                </button>
               </div>
-              <div class="uk-align-middle uk-margin-small-top">
-                <button {{action 'addToCart' item}} class="uk-button uk-button-text">select</button>
-              </div>        
-            </div>
-          </div>      
-          <hr>
-        {{/unless}}
-      {{/each}}
-      {{/with}}
+            </div>      
+            <hr>
+          {{/unless}}
+        {{/each}}
+        {{/with}}
+      </div>
     </div>
-  </div>
-  <div class="uk-width-2-5">
-    <div style="border: 1px solid #E6E6E6;" class="uk-card uk-card-default uk-card-body uk-padding-small">
-      <h4 class="uk-card-title">Total {{selectedItemsCount}} item(s):</h4>
-      <hr>
-      <h5 class="uk-text-bold uk-text-right uk-margin-small-top">${{fmtTotalItemPrice}}</h5>
-      {{#if session.currentUser.cart.metaCartItems}}
-        <button {{action 'toCheckout'}} class="uk-button uk-button-primary uk-width-1-1">Proceed to checkout</button>
-      {{else}}
-        <button class="uk-button uk-button-primary uk-width-1-1" disabled>Proceed to checkout</button>
-      {{/if}}
+    <div class="uk-width-2-5">
+      <div style="border: 1px solid #E6E6E6;" class="uk-card uk-card-default uk-card-body uk-padding-small">
+        <h4 class="uk-card-title">Total {{selectedItemsCount}} item(s):</h4>
+        <hr>
+        <h5 class="uk-text-bold uk-text-right uk-margin-small-top">${{fmtTotalItemPrice}}</h5>
+        {{#if session.currentUser.cart.metaCartItems}}
+          <button {{action 'toCheckout'}} class="uk-button uk-button-primary uk-width-1-1">Proceed to checkout</button>
+        {{else}}
+          <button class="uk-button uk-button-primary uk-width-1-1" disabled>Proceed to checkout</button>
+        {{/if}}
+      </div>
     </div>
   </div>
 </div>
+<footer style="background-color: #18427A;">
+  <div class="uk-container">
+    <div class="uk-grid-small" uk-grid>
+      <div class="uk-width-auto">
+        <img style=""  class="uk-margin-large-top" width="92" height="46" src="/images/9ple-beta-2017-09-04.png" alt="9ple logo">
+        <p class="uk-text-meta uk-margin-small-top uk-margin-small-bottom">Term of Services | Privacy Policy</p>
+        <p class="uk-text-meta uk-margin-remove-top uk-margin-large-bottom">© 9ple, 2017. all rights reserved.</p>
+      </div>
+      <div class="uk-width-expand">
+        
+      </div>
+    </div>
+  </div>
+</footer>
 <div id="modal-item-delete" uk-modal>
   <div class="uk-modal-dialog uk-modal-body">
     <h2 class="uk-modal-title">Notice</h2>

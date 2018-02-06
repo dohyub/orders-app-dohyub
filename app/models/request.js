@@ -13,7 +13,7 @@ export default DS.Model.extend({
   metaCartItems: DS.attr('object'),
   // cardinfo: DS.attr('object'),
   paymentProfile: DS.attr('object'),
-  // billing: DS.attr(),
+  billing: DS.attr(),
   shipping: DS.attr(),
   // cart: DS.attr('object'),
   cartError: DS.attr('string'),

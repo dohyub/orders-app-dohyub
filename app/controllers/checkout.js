@@ -30,5 +30,8 @@ export default Controller.extend({
   },
   @action setShipping(s) {
     this.set('shipping', s);
+  },
+  @action setBilling(b) {
+    this.set('billing', b);
   }
 });
