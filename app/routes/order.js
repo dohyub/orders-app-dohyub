@@ -5,4 +5,7 @@ export default Route.extend({
   model() {
     return this.get("session.currentUser.requests");
   },
+  beforeModel() {
+    this.session.redirectGuestTo('signin');
+  },
 });

@@ -1,4 +1,4 @@
-<header style="background-color: #2f80ed;">
+<header style="background-color: #2f80ed;" class="uk-margin-medium-bottom">
   <div class="uk-container">
     <div class="uk-grid-small" uk-grid>
       <div class="uk-width-auto">
@@ -49,16 +49,17 @@
                   </div>
                   <div class="uk-width-expand uk-text-right" uk-grid>
                     <div class="uk-width-1-2">
-                      <span>Qty  :  {{item.quantity}}</span>
-                      <a {{action 'minus' item}} uk-icon="icon: minus-circle"></a>
-                      <a {{action 'plus' item}} uk-icon="icon: plus-circle"></a>
+                      <span>Qty &nbsp; : &nbsp; </span>
+                      <a {{action 'minus' item}} uk-icon="icon: chevron-down"></a>
+                      <span>{{item.quantity}}</span>
+                      <a {{action 'plus' item}} uk-icon="icon: chevron-up"></a>
                     </div>
                     <div class="uk-width-1-2">
                       <span class="uk-text-bold">${{item.totalPrice}}</span>
                     </div>
                   </div>            
                 </div>
-                <div>
+                <div class="uk-margin-small-top">
                   <form {{action 'saveOption' item on='submit'}}>
                     {{input class="uk-input uk-width-medium" type="text" value=item.option placeholder="option"}}
                     <button class="uk-button uk-button-default">update</button>

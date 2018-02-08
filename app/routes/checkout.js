@@ -37,6 +37,9 @@ export default Route.extend({
       user, shippings, cart, payments, billings, items
     });
   },
+  beforeModel() {
+    this.session.redirectGuestTo('signin');
+  },
   updatePaymentsList() {
     const user = this.get('session.currentUser');
     const postUrl = "https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-getPayment/";
@@ -123,7 +126,7 @@ export default Route.extend({
       return user.save();
     }).then(() => {
       alert("save success");
-      this.controller.set('inputAddressView', false);
+      this.controller.set('inputShippingAddressView', false);
       this.controller.set('shipping', model.shippings.get('lastObject'));
     })
   },

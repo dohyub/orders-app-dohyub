@@ -1,4 +1,4 @@
-<header style="background-color: #2f80ed;">
+<header style="background-color: #2f80ed;" class="uk-margin-medium-bottom">
   <div class="uk-container">
     <div class="uk-grid-small" uk-grid>
       <div class="uk-width-auto">
@@ -316,10 +316,11 @@
             {{/if}}
           </div>
           <div class="uk-width-1-2">
-            <div class="">
-              <span class="uk-text-small">to be decided</span>
-            </div>
+            {{#unless isAllShippable}}
+              <div class=""><span class="uk-text-small">to be decided</span></div>
+            {{/unless}}      
             {{#if isAllShippable}}
+              <div class=""><span class="uk-text-small">&nbsp;</span></div>
               <div class=""><span class="uk-text-small">${{totalShippingFee}}</span></div>
             {{/if}}
           </div>

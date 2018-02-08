@@ -12,7 +12,9 @@ export default Route.extend({
     window.c = config
   },
   @action signOut() {
-    this.session.redirectUserTo('signin');
-    this.session.signOut();
+    // this.session.redirectUserTo('signin');
+    this.session.signOut().then(res => {
+      this.refresh();
+    })
   }
 });

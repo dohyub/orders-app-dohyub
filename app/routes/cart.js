@@ -5,6 +5,9 @@ export default Route.extend({
   model() {
     return this.get("session.currentUser.cart");
   },
+  beforeModel() {
+    this.session.redirectGuestTo('signin');
+  },
   @action minus(item) {
     if (item.get('quantity') < 2) { return; }
     item.decrementProperty('quantity');
