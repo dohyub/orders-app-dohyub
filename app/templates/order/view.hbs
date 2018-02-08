@@ -61,8 +61,8 @@
     </table>
   </div>  
 {{/each}}
-<div class="uk-width-xlarge">
-  <table class="uk-table uk-table-small uk-text-small">
+<div class="uk-width-auto">
+  <table class="uk-table uk-table-small uk-text-small uk-table-justify">
     <thead>
       <tr>
         <th>Vendor</th>
@@ -85,25 +85,47 @@
     </tbody>
   </table>
 </div>
-<div class="uk-width-xlarge">
-  <table class="uk-table uk-table-small uk-text-small">
-    <thead>
-      <tr>
-        <th>local Tracking Carrier</th>
-        <th>local Tracking Number</th>
-        <th>local Tracking URL</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each model.trackingInformations as |tracking|}}
-      <tr>
-        <td>{{tracking.trackingCarrier}}</td>
-        <td>{{tracking.trackingNumber}}</td>
-        <td><h5><a class="uk-link-heading" href={{tracking.trackingURL}}>Tracking Info</a></h5></td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+<div class="uk-width-auto" uk-grid>
+  <div class="uk-width-expand">
+    <table class="uk-table uk-table-small uk-text-small uk-table-justify">
+      <caption>Local</caption>
+      <thead>
+        <tr>
+          <th>Tracking Carrier</th>
+          <th>Tracking Number</th>
+          <th>Tracking URL</th>        
+        </tr>
+      </thead>
+      <tbody>
+        {{#each model.trackingInformations as |tracking|}}
+        <tr>
+          <td>{{tracking.trackingCarrier}}</td>
+          <td>{{tracking.trackingNumber}}</td>
+          <td><h5><a class="uk-link-heading" href={{tracking.trackingURL}}>Tracking Info</a></h5></td>          
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div class="uk-width-auto">
+    <table class="uk-table uk-table-small uk-text-small uk-table-justify">
+      <caption>International</caption>
+      <thead>
+        <tr>
+          <th>Tracking URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {{#if model.moniebinTrackingNumber}}
+            <td><a class="uk-link-heading" target="_blank" href="http://moniebin.com/tracking.php?no={{model.moniebinTrackingNumber}}">International Tracking Info</a></td>
+          {{else}}
+            <td></td>
+          {{/if}}  
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <div class="uk-card-body">
 <h4 class="uk-heading-line uk-text-center"><span>Authorization</span></h4>

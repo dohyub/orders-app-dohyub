@@ -196,6 +196,10 @@ export default Route.extend({
     });
   },
   @action requestOrder(model) {
+    if (!this.controller.get('billing') || !this.controller.get('shipping') || !this.controller.get('payment')) {
+      alert("Please select information");
+      return;
+    }
     const paymentProfile = this.controller.get('payment');
     const shipping = this.controller.get('shipping').toJSON();
     const billing = this.controller.get('billing').toJSON();
@@ -209,6 +213,8 @@ export default Route.extend({
     const debug = false;
     delete shipping.createdAt;
     delete shipping.user;
+    delete billing.createdAt;
+    delete billing.user;
     const requestObj = {
       user: user,
       paymentProfile: paymentProfile,

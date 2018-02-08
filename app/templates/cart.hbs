@@ -2,7 +2,9 @@
   <div class="uk-container">
     <div class="uk-grid-small" uk-grid>
       <div class="uk-width-auto">
-        <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo">
+        {{#link-to 'cart'}}
+          <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo">
+        {{/link-to}}
       </div>
       <div class="uk-width-expand" uk-grid>
         <div class="uk-width-expand">
@@ -36,7 +38,7 @@
                 <div class="uk-grid-small" uk-grid>
                   <div class="uk-width-expand">
                     <a href={{item.linkToMarket}} target="_blank">
-                      <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+                      <p class="uk-card-title uk-margin-remove-bottom"><h5>{{item.title}}</h5></p>
                     </a>
                   </div>
                   <div class="uk-width-auto">
@@ -88,7 +90,7 @@
               </div>
               <div class="uk-width-expand">
                 <a href={{item.linkToMarket}} target="_blank">
-                  <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+                  <p class="uk-card-title uk-margin-remove-bottom"><h5>{{item.title}}</h5></p>
                 </a>
                 <div class="uk-grid-small" uk-grid>
                   <div class="uk-width-auto">
