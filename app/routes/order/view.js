@@ -35,6 +35,48 @@ export default Route.extend({
       UIkit.modal('#modal-cancel-error').show();  
     })
   },
+  @action requestIndividualCancel(model, item) {
+    let metaCartItemsCount;
+    let cancelCount;
+    item.itemCancel = true;
+    item.cancelConfirm = "Canceled.";
+    model.save().then(res => {
+      metaCartItemsCount = res.get('metaCartItems').length;
+      cancelCount = res.get('metaCartItems').filterBy('itemCancel',true).length;
+      if (metaCartItemsCount === cancelCount) {
+        res.set('icon', 'red remove');
+        res.set('reqCancel', true);
+        return res.save();
+      } else { return false; }
+    }).then(res => {
+      if (res !== false) {
+        console.log("All cancel");
+      }
+    })
+  },
+  @action userSelect(model, item, select) {
+    let metaCartItemsCount;
+    let cancelCount;
+    if (select === "ok") {
+      item.itemStatuses.purchaseOk = true;
+    } else {
+      item.itemCancel = true;
+      item.cancelConfirm = "Canceled.";
+    }
+    model.save().then(res => {
+      metaCartItemsCount = res.get('metaCartItems').length;
+      cancelCount = res.get('metaCartItems').filterBy('itemCancel',true).length;
+      if (metaCartItemsCount === cancelCount) {
+        res.set('icon', 'red remove');
+        res.set('reqCancel', true);
+        return res.save();
+      } else { return false; }
+    }).then(res => {
+      if (res !== false) {
+        console.log("All cancel");
+      }
+    })
+  },
   setupController(controller, model) {
     this._super(...arguments);
     switch (model.get('icon')) {

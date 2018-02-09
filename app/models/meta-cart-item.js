@@ -26,6 +26,9 @@ export default DS.Model.extend({
   price: DS.attr('number'),       // in cents for example, $10 is 1000
   dimensions: DS.attr('object'),  // for estimation of shipping fee
   variations: DS.attr('object'),  // variation
+  // itemStatuses: DS.attr('object'),
+  // itemCancel: DS.attr('boolean'),
+  // cancelConfirm: DS.attr('string'),
 
   @computed('dimensions', 'quantity')
   shippingFeeByQty(dim, q) {

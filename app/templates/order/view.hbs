@@ -9,24 +9,52 @@
         <a href="{{item.linkToMarket}}" target="_blank">
           <p class="uk-card-title uk-margin-remove-bottom"><h4>{{item.title}}</h4></p>
         </a>
-          <p class="uk-text-meta uk-margin-remove-top">
-            By {{item.manufacturer}}
-            <!-- {{#unless reqCancel}}
-              <div uk-form-custom="target: > * > span:first-child">
-                <select>
-                  <option value="-1">Please select...</option>
-                  <option value="1">Product OK</option>
-                  <option value="2">Out of Stock</option>
-                  <option value="3">Price Change</option>
-                  <option value="4">Local shipping cost</option>
-                </select>
-                <button class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">
-                  <span></span>
-                  <span uk-icon="icon: chevron-down"></span>
-                </button>
-              </div>
-            {{/unless}} -->
-          </p>
+        <div uk-grid>
+          <div class="">
+            <p class="uk-text-meta uk-margin-remove-top">
+              By {{item.manufacturer}}&nbsp;&nbsp;
+              {{#unless model.reqCancel}}
+                <!-- <div uk-form-custom="target: > * > span:first-child">
+                  <select>
+                    <option value="-1">Please select...</option>
+                    <option value="1">Product OK</option>
+                    <option value="2">Out of Stock</option>
+                    <option value="3">Price Change</option>
+                    <option value="4">Local shipping cost</option>
+                  </select>
+                  <button class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">
+                    <span></span>
+                    <span uk-icon="icon: chevron-down"></span>
+                  </button>
+                </div> -->
+                {{#unless item.itemStatuses}}
+                  <button {{action 'requestIndividualCancel' model item}} class="uk-button uk-button-text uk-text-primary">cancel</button>
+                {{else}}
+                  <select onchange={{action (route-action 'userSelect' model item) value="target.value"}}>
+                    <option>Please select...</option>
+                    <option value="ok">Purchase Ok</option>
+                    <option value="cancel">order Cancel</option>
+                  </select>
+                  <!-- <button {{action 'userSelect' model item select}}>select</button> -->
+                {{/unless}}      
+              {{/unless}}
+            </p>
+          </div>
+          <div class="">
+            {{#if item.itemCancel}}
+              <span class="uk-text-success">{{item.cancelConfirm}}</span>
+            {{else}}
+              {{#if item.itemStatuses.body}}
+                <span class="uk-text-success">
+                  {{item.itemStatuses.body}}
+                  {{#if item.itemStatuses.price}} 
+                    ${{item.itemStatuses.price}}
+                  {{/if}}
+                </span>
+              {{/if}}
+            {{/if}}
+          </div>
+        </div>    
       </div>
     </div>
     <table class="uk-table uk-table-small uk-text-small">
