@@ -1,17 +1,20 @@
-<header style="background-color: #2f80ed;">
+<header style="background-color: #2f80ed;" class="uk-margin-medium-bottom">
   <div class="uk-container">
-    <div class="uk-grid-small" uk-grid>
+    <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
       <div class="uk-width-auto">
-        <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo">
+        {{#link-to 'cart'}}
+          <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo">
+        {{/link-to}}
+        <!-- <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo"> -->
       </div>
-      <div class="uk-width-expand" uk-grid>
-        <div class="uk-width-expand">
-          {{#link-to 'order' tagName="button" class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom"}}
-            Orders
-          {{/link-to}}
-        </div>
-        <div class="uk-width-auto">
-          <button {{action 'signOut'}} class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom uk-margin-small-left uk-text-success">Sign Out</button>
+      <div class="uk-width-expand">
+        <button class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom" type="button"><a href="" uk-icon="user"></a></button>
+        <div uk-dropdown>
+            <ul class="uk-nav uk-dropdown-nav">
+                <li class="uk-active"><a href="order">Order</a></li>
+                <li class="uk-nav-divider"></li>
+                <li class="uk-active" {{action 'signOut'}}><a href="#">Sign Out</a></li>
+            </ul>
         </div>
       </div>
     </div>  

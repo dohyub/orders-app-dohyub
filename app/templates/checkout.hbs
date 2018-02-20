@@ -1,19 +1,20 @@
 <header style="background-color: #2f80ed;" class="uk-margin-medium-bottom">
   <div class="uk-container">
-    <div class="uk-grid-small" uk-grid>
+    <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
       <div class="uk-width-auto">
         {{#link-to 'cart'}}
           <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo">
         {{/link-to}}
+        <!-- <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo"> -->
       </div>
-      <div class="uk-width-expand" uk-grid>
-        <div class="uk-width-expand">
-          {{#link-to 'order' tagName="button" class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom"}}
-            Orders
-          {{/link-to}}
-        </div>
-        <div class="uk-width-auto">
-          <button {{action 'signOut'}} class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom uk-margin-small-left uk-text-success">Sign Out</button>
+      <div class="uk-width-expand">
+        <button class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom" type="button"><a href="" uk-icon="user"></a></button>
+        <div uk-dropdown>
+            <ul class="uk-nav uk-dropdown-nav">
+                <li class="uk-active"><a href="order">Order</a></li>
+                <li class="uk-nav-divider"></li>
+                <li class="uk-active" {{action 'signOut'}}><a href="#">Sign Out</a></li>
+            </ul>
         </div>
       </div>
     </div>  
@@ -21,8 +22,8 @@
 </header>
 <div class="uk-container">
   <div class="uk-text-bold uk-text-center uk-text-lead uk-margin-bottom">Checkout</div>
-  <div uk-grid>
-    <div class="uk-width-3-5">
+  <div class="uk-child-width-expand@s" uk-grid>
+    <div class="">
       <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
         <span class="uk-margin-small-right" uk-icon="credit-card"></span>
         <span class="uk-text-lead">Payment Information</span>
@@ -242,11 +243,11 @@
                 <a href={{item.linkToMarket}} target="_blank">
                   <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
                 </a>
-                <div class="uk-grid-small" uk-grid>
+                <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
                   <div class="uk-width-auto">
                     <b>By {{item.manufacturer}}</b>  
                   </div>
-                  <div class="uk-width-expand uk-text-right" uk-grid>
+                  <div class="" uk-grid>
                     <div class="uk-width-1-2">
                       <span>Qty : {{item.quantity}}</span>
                     </div>
@@ -264,7 +265,7 @@
         {{/with}}      
       </div>
     </div>
-    <div class="uk-width-2-5">
+    <div class="">
       <div style="border: 1px solid #E6E6E6;" class="uk-card uk-card-default uk-card-body uk-padding-small">
         <h4 class="uk-card-title uk-margin-small-bottom">Markets will charge this amount.</h4>  
         <hr>
