@@ -10,11 +10,15 @@
       <div class="uk-width-expand">
         <button class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom" type="button"><a href="" uk-icon="user"></a></button>
         <div uk-dropdown>
-            <ul class="uk-nav uk-dropdown-nav">
-                <li class="uk-active"><a href="order">Order</a></li>
-                <li class="uk-nav-divider"></li>
-                <li class="uk-active" {{action 'signOut'}}><a href="#">Sign Out</a></li>
-            </ul>
+          <ul class="uk-nav uk-dropdown-nav">
+            {{#link-to 'order' tagName="li" activeClass="uk-active"}}
+              <a>Order</a>
+            {{/link-to}}
+            <li class="uk-nav-divider"></li>
+            {{#link-to 'order' tagName="li" activeClass="uk-active"}}
+              <a {{action 'signOut'}}>Sign Out</a>
+            {{/link-to}}
+          </ul>
         </div>
       </div>
     </div>  
@@ -233,34 +237,32 @@
         <hr>
         {{#with session.currentUser.cart as |cart|}}
         {{#each cart.metaCartItems as |item|}}
-          {{#if item.selectedItem}}
-            <div class="uk-grid-small" uk-grid>
-              <div class="uk-width-auto">
-                <img class="uk-border-rounded" width="60" height="60" src={{item.image}}>
-                <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
-              </div>
-              <div class="uk-width-expand">
-                <a href={{item.linkToMarket}} target="_blank">
-                  <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
-                </a>
-                <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
-                  <div class="uk-width-auto">
-                    <b>By {{item.manufacturer}}</b>  
-                  </div>
-                  <div class="" uk-grid>
-                    <div class="uk-width-1-2">
-                      <span>Qty : {{item.quantity}}</span>
-                    </div>
-                    <div class="uk-width-1-2">
-                      <span class="uk-text-bold">${{item.totalPrice}}</span>
-                    </div>
-                  </div>            
-                </div>
-                <span class="uk-text-meta">{{item.option}}</span>
-              </div>
+          <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-auto">
+              <img class="uk-border-rounded" width="60" height="60" src={{item.image}}>
+              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
             </div>
-            <hr>
-          {{/if}}
+            <div class="uk-width-expand">
+              <a href={{item.linkToMarket}} target="_blank">
+                <p class="uk-card-title uk-margin-remove-bottom"><h6>{{item.title}}</h6></p>
+              </a>
+              <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+                <div class="uk-width-auto">
+                  <b>By {{item.manufacturer}}</b>  
+                </div>
+                <div class="" uk-grid>
+                  <div class="uk-width-1-2">
+                    <span>Qty : {{item.quantity}}</span>
+                  </div>
+                  <div class="uk-width-1-2">
+                    <span class="uk-text-bold">${{item.totalPrice}}</span>
+                  </div>
+                </div>            
+              </div>
+              <span class="uk-text-meta">{{item.option}}</span>
+            </div>
+          </div>
+          <hr>
         {{/each}}
         {{/with}}      
       </div>

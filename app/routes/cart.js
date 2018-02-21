@@ -3,7 +3,11 @@ import { action } from 'ember-decorators/object';
 
 export default Route.extend({
   model() {
-    return this.get("session.currentUser.cart");
+    const user = this.get('session.currentUser');
+    const cart = user.get('cart');
+    return Ember.RSVP.hash({
+      user, cart
+    });
   },
   beforeModel() {
     this.session.redirectGuestTo('signin');
@@ -33,6 +37,7 @@ export default Route.extend({
     })
   },
   @action addToCart(item) {
+    
     let select = item.get('selectedItem');
     if (select === false) {
       item.set('selectedItem', true);
@@ -42,12 +47,6 @@ export default Route.extend({
     item.save();
   },
   @action toCheckout() {
-    let metaCartItems = this.currentModel.get('metaCartItems');
-    let cartItemCount = metaCartItems.filterBy('selectedItem',true).length;
-    if (cartItemCount === 0) {
-      UIkit.modal('#modal-add-cart').show();  
-    } else {
-      this.session.redirectUserTo('checkout');
-    }
+    this.session.redirectUserTo('checkout');
   },
 });

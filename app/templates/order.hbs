@@ -10,11 +10,15 @@
       <div class="uk-width-expand">
         <button class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom" type="button"><a href="" uk-icon="user"></a></button>
         <div uk-dropdown>
-            <ul class="uk-nav uk-dropdown-nav">
-                <li class="uk-active"><a href="order">Order</a></li>
-                <li class="uk-nav-divider"></li>
-                <li class="uk-active" {{action 'signOut'}}><a href="#">Sign Out</a></li>
-            </ul>
+          <ul class="uk-nav uk-dropdown-nav">
+            {{#link-to 'order' tagName="li" activeClass="uk-active"}}
+              <a>Order</a>
+            {{/link-to}}
+            <li class="uk-nav-divider"></li>
+            {{#link-to 'order' tagName="li" activeClass="uk-active"}}
+              <a {{action 'signOut'}}>Sign Out</a>
+            {{/link-to}}
+          </ul>
         </div>
       </div>
     </div>  
