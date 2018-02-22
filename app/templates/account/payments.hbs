@@ -1,0 +1,84 @@
+<div class="uk-container uk-margin-xlarge-bottom">
+  <button {{action 'modalPayment'}} class="uk-button uk-button-default uk-text-primary uk-align-right uk-margin-medium-top" href="#show-input-payment" uk-toggle>Add payment</button>
+  <table class="uk-table uk-margin-medium-top uk-margin-xlarge-bottom uk-table-striped uk-table-hover uk-table-divider">
+    <caption><h2>Credit Card</h2></caption>
+    <thead>
+      <tr>
+        <th>Cardholder</th>
+        <th>Number</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each model as |p|}}
+        <tr>
+          <td>{{p.billTo.firstName}}</td>
+          <td>{{p.payment.creditCard.cardNumber}}</td>
+          <td><a {{action 'showDeleteModal' p}} class="uk-icon-button uk-text-danger" uk-icon="trash"></a></td>
+        </tr>
+      {{/each}}
+    </tbody>
+</table>
+</div>
+<div id="show-input-payment" bg-close="false" uk-modal>
+  <div class="uk-modal-dialog">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <div class="uk-modal-header">
+      <h2 class="uk-modal-title">Payment</h2>
+    </div>
+    <div class="uk-modal-body">
+      <form class="uk-margin-top" {{action 'createPayment' number cvc zipcode name month year on='submit'}}>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-3">
+            <span class="uk-text-small">Number</span>
+            {{input class="uk-input" type="text" value=number}}
+          </div>
+          <div class="uk-width-1-3">
+            <span class="uk-text-small">CVC</span>
+            {{input class="uk-input" type="text" value=cvc}}
+          </div>
+          <div class="uk-width-1-3">
+            <span class="uk-text-small">Zipcode</span>
+            {{input class="uk-input" type="text" value=zipcode}}
+          </div>
+        </div>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-3">
+            <span class="uk-text-small">Name on card</span>
+            {{input class="uk-input" type="text" value=name}}
+          </div>
+          <div class="uk-width-1-3">
+            <span class="uk-text-small">MM</span>
+            {{input class="uk-input" type="text" value=month}}
+          </div>
+          <div class="uk-width-1-3">
+            <span class="uk-text-small">YY</span>
+            {{input class="uk-input" type="text" value=year}}
+          </div>
+        </div>
+        <div class="uk-margin-small-top uk-text-center">
+          {{#unless paymentSaveLoading}}
+            <button class="uk-button uk-button-default uk-text-primary">save</button>
+          {{else}}
+            <button class="uk-button uk-button-default uk-text-primary" uk-spinner></button>
+          {{/unless}}    
+          <button {{action 'inputPaymentClose'}} class="uk-button uk-button-default uk-text-danger">cancel</button>
+        </div>      
+      </form>
+    </div>
+  </div>
+</div>
+<div id="modal-payment-delete" bg-close="false" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+    <h2 class="uk-modal-title">Notice</h2>
+    <p>Do you wish to delete this credit card?</p>
+    <p class="uk-text-center">
+      {{#unless deleteLoading}}
+        <button {{action 'deletePayment'}} class="uk-button uk-button-primary" type="button">Ok</button>
+      {{else}}
+        <button class="uk-button uk-button-default uk-text-primary" uk-spinner></button>
+      {{/unless}}
+      <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>   
+    </p>
+  </div>
+</div>

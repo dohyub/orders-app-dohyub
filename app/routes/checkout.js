@@ -90,8 +90,9 @@ export default Route.extend({
       .then(() => {
         if (errorCheck.messages.resultCode !== "Ok") { 
           alert("error");
+        } else {
+          alert("save success");
         }
-        alert("save success");
         this.controller.set('paymentSaveLoading', false);
         this.controller.set('inputPaymentView', false);
         this.controller.set('payment', model.payments.get('firstObject'));

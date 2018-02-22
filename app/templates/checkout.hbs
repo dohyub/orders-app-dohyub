@@ -11,6 +11,9 @@
         <button class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom" type="button"><a href="" uk-icon="user"></a></button>
         <div uk-dropdown>
           <ul class="uk-nav uk-dropdown-nav">
+            {{#link-to 'account' tagName="li" activeClass="uk-active"}}
+              <a>My account</a>
+            {{/link-to}}
             {{#link-to 'order' tagName="li" activeClass="uk-active"}}
               <a>Order</a>
             {{/link-to}}

@@ -61,6 +61,7 @@ export default Route.extend({
     let selectedCount;
     if (select === "ok") {
       item.itemStatuses.purchaseOk = true;
+      item.itemStatuses.purchaseStatus = true;
     } else {
       item.itemCancel = true;
       item.cancelConfirm = "Canceled.";

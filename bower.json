@@ -1,0 +1,6 @@
+{
+  "name": "orders-app",
+  "dependencies": {
+    "intl-tel-input": "~6.0.3"
+  }
+}

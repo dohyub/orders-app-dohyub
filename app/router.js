@@ -14,6 +14,10 @@ Router.map(function() {
   this.route('order', function() {
     this.route('view', { path: '/:id'});
   });
+  this.route('account', function() {
+    this.route('addresses');
+    this.route('payments');
+  });
 });
 
 export default Router;
