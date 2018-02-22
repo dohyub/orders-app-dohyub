@@ -22,6 +22,9 @@ function createPaymentProfile(anetUrl,requestData) {
 }
 
 export default Route.extend({
+  beforeModel() {
+    this.session.redirectGuestTo('signin');
+  },
   model() {
     const postUrl = "https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-getPayment/";
     const user = this.get('session.currentUser');
@@ -36,9 +39,6 @@ export default Route.extend({
     return Ember.RSVP.hash({
       user, shippings, cart, payments, billings, items
     });
-  },
-  beforeModel() {
-    this.session.redirectGuestTo('signin');
   },
   updatePaymentsList() {
     const user = this.get('session.currentUser');
@@ -90,8 +90,9 @@ export default Route.extend({
       .then(() => {
         if (errorCheck.messages.resultCode !== "Ok") { 
           alert("error");
+        } else {
+          alert("save success");
         }
-        alert("save success");
         this.controller.set('paymentSaveLoading', false);
         this.controller.set('inputPaymentView', false);
         this.controller.set('payment', model.payments.get('firstObject'));
@@ -204,8 +205,8 @@ export default Route.extend({
     const shipping = this.controller.get('shipping').toJSON();
     const billing = this.controller.get('billing').toJSON();
     // const metaCartItems = model.items.map(i => i.toJSON());
-    const selectedItems = model.items.filterBy('selectedItem',true);
-    const metaCartItems = selectedItems.map(i => i.toJSON());
+    // const selectedItems = model.items.filterBy('selectedItem',true);
+    const metaCartItems = model.items.map(i => i.toJSON());
     const user = this.get('session.currentUser');
     const cart = model.cart;
     const email = this.currentModel.user.get('auth.email');
@@ -229,9 +230,9 @@ export default Route.extend({
       user.get('requests').pushObject(addr);
       return user.save();
     }).then(() => {
-      cart.get('metaCartItems').removeObjects(selectedItems.toArray());
+      cart.get('metaCartItems').removeObjects(model.items.toArray());
       cart.save().then(c => {
-        return selectedItems.map(i => i.destroyRecord());
+        return model.items.map(i => i.destroyRecord());
       })
     }).then(res => {
       this.session.redirectUserTo('order');

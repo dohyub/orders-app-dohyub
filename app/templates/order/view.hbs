@@ -57,39 +57,41 @@
         </div>    
       </div>
     </div>
-    <table class="uk-table uk-table-small uk-text-small">
-      <thead>
-      <tr>
-        <th>Vendor</th>
-        <th>Product ID</th>
-        <th>Options</th>
-        <th>Qty</th>
-        <th>Price</th>
-      </tr>
-      </thead>
-      <tbody>
+    <div class="uk-overflow-auto">
+      <table class="uk-table uk-table-small uk-text-small">
+        <thead>
         <tr>
-          <td><img width="60" height="60"src="/images/{{item.market}}.svg" alt="market"></td>
-          <td>{{item.productId}}</td>
-          <td>
-            {{#if item.variations}}
-              {{#with item.variations as |vs|}}
-                {{#each-in vs as |k v|}}
-                  <p>{{k}}: {{v}}</p>
-                {{/each-in}}
-              {{/with}}
-            {{else}}
-              {{item.option}}
-            {{/if}}
-          </td>
-          <td>{{item.quantity}}</td>
-          <td>${{item.price}}</td>
+          <th>Vendor</th>
+          <th>Product ID</th>
+          <th>Options</th>
+          <th>Qty</th>
+          <th>Price</th>
         </tr>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img width="60" height="60"src="/images/{{item.market}}.svg" alt="market"></td>
+            <td>{{item.productId}}</td>
+            <td>
+              {{#if item.variations}}
+                {{#with item.variations as |vs|}}
+                  {{#each-in vs as |k v|}}
+                    <p>{{k}}: {{v}}</p>
+                  {{/each-in}}
+                {{/with}}
+              {{else}}
+                {{item.option}}
+              {{/if}}
+            </td>
+            <td>{{item.quantity}}</td>
+            <td>${{item.price}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>  
 {{/each}}
-<div class="uk-width-auto">
+<div class="uk-overflow-auto">
   <table class="uk-table uk-table-small uk-text-small uk-table-justify">
     <thead>
       <tr>
@@ -113,47 +115,31 @@
     </tbody>
   </table>
 </div>
-<div class="uk-width-auto" uk-grid>
-  <div class="uk-width-expand">
-    <table class="uk-table uk-table-small uk-text-small uk-table-justify">
-      <caption>Local</caption>
-      <thead>
-        <tr>
-          <th>Tracking Carrier</th>
-          <th>Tracking Number</th>
-          <th>Tracking URL</th>        
-        </tr>
-      </thead>
-      <tbody>
+<div class="uk-overflow-auto">
+  <table class="uk-table uk-table-small uk-text-small uk-table-justify">  
+    <thead>
+      <tr>
+        <th>Tracking Carrier</th>
+        <th>Tracking Number</th>
+        <th>Tracking URL</th>  
+        <th>International Tracking URL</th>      
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
         {{#each model.trackingInformations as |tracking|}}
-        <tr>
           <td>{{tracking.trackingCarrier}}</td>
           <td>{{tracking.trackingNumber}}</td>
           <td><h5><a class="uk-link-heading" href={{tracking.trackingURL}}>Tracking Info</a></h5></td>          
-        </tr>
         {{/each}}
-      </tbody>
-    </table>
-  </div>
-  <div class="uk-width-auto">
-    <table class="uk-table uk-table-small uk-text-small uk-table-justify">
-      <caption>International</caption>
-      <thead>
-        <tr>
-          <th>Tracking URL</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {{#if model.moniebinTrackingNumber}}
-            <td><a class="uk-link-heading" target="_blank" href="http://moniebin.com/tracking.php?no={{model.moniebinTrackingNumber}}">International Tracking Info</a></td>
-          {{else}}
-            <td></td>
-          {{/if}}  
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        {{#if model.moniebinTrackingNumber}}
+          <td><a class="uk-link-heading" target="_blank" href="http://moniebin.com/tracking.php?no={{model.moniebinTrackingNumber}}">International Tracking Info</a></td>
+        {{else}}
+          <td></td>
+        {{/if}}  
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div class="uk-card-body">
 <h4 class="uk-heading-line uk-text-center"><span>Authorization</span></h4>
@@ -174,11 +160,11 @@
           {{simple-time a.createdAt}}
         </div>
         <div class="uk-margin-small">
-          <span class="uk-label uk-label-default">{{a.descriptor}} - {{r.accountType}} - {{r.accountNumber}}</span>
+          <span class="uk-text-primary">{{a.descriptor}} - {{r.accountType}} - {{r.accountNumber}}</span>
         </div>
         <div class="uk-margin-small">
           {{#if r.errors}}
-            <span class="uk-label uk-label-danger">error</span>
+            <span class="uk-text-danger">error</span>
           {{/if}}
         </div>
         <div class="uk-article-meta">

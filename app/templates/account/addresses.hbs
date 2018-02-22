@@ -1,0 +1,275 @@
+<div class="uk-container">
+  <div class="uk-overflow-auto uk-margin-medium-top uk-margin-medium-bottom">
+    <button class="uk-button uk-button-default uk-text-primary" href="#show-input-shipping" uk-toggle>Add address</button>
+    <table class="uk-table uk-table-striped uk-table-hover uk-text-small">
+      <caption><h2>Shipping addresses</h2></caption>
+      <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address Line 1</th>
+            <th class="uk-table-shrink">Address Line 2</th>
+            <th>Zip Code</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Phone Number</th>
+            <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each model.shippings as |address|}}
+          <tr>
+            <td>{{address.firstname}}</td>
+            <td>{{address.lastname}}</td>
+            <td>{{address.address1}}</td>
+            <td>{{address.address2}}</td>
+            <td>{{address.zipcode}}</td>
+            <td>{{address.city}}</td>
+            <td>{{address.state}}</td>
+            <td>{{address.country}}</td>
+            <td>{{address.phonenumber}}</td>
+            <td>
+              <a {{action 'modifyAddress' address}} class="uk-icon-button uk-text-primary" uk-icon="file-edit"></a>
+              <a {{action 'showShippingDelete' address}} class="uk-icon-button uk-text-danger" uk-icon="trash"></a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <hr>
+  <div class="uk-overflow-auto uk-margin-medium-top uk-margin-large-bottom">
+    <button class="uk-button uk-button-default uk-text-primary" href="#show-input-billing" uk-toggle>Add address</button>
+    <table class="uk-table uk-table-striped uk-table-hover uk-text-small">
+      <caption><h2>Billing addresses</h2></caption>
+      <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address Line 1</th>
+            <th>Address Line 2</th>
+            <th>Zip Code</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Phone Number</th>
+            <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each model.billings as |address|}}
+          <tr>
+            <td>{{address.firstname}}</td>
+            <td>{{address.lastname}}</td>
+            <td>{{address.address1}}</td>
+            <td>{{address.address2}}</td>
+            <td>{{address.zipcode}}</td>
+            <td>{{address.city}}</td>
+            <td>{{address.state}}</td>
+            <td>{{address.country}}</td>
+            <td>{{address.phonenumber}}</td>
+            <td>
+              <a {{action 'modifyAddress' address}} class="uk-icon-button uk-text-primary" uk-icon="file-edit"></a>
+              <a {{action 'showBillingDelete' address}} class="uk-icon-button uk-text-danger" uk-icon="trash"></a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div id="show-input-shipping" uk-modal>
+  <div class="uk-modal-dialog">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <div class="uk-modal-header">
+      <h2 class="uk-modal-title">Add address</h2>
+    </div>
+    <div class="uk-modal-body">
+      <form class="uk-margin-top" {{action 'createShipping' firstName lastName street1 street2 city state zipcode country phoneNumber on='submit'}}>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">First name</span>
+            {{input class="uk-input" type="text" value=firstName}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Last name</span>
+            {{input class="uk-input" type="text" value=lastName}}
+          </div>
+        </div>
+        <div>
+          <span class="uk-text-small">Street1</span>
+          {{input class="uk-input" type="text" value=street1}}
+        </div>
+        <div>
+          <span class="uk-text-small">Street2</span>
+          {{input class="uk-input" type="text" value=street2}}
+        </div>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">City</span>
+            {{input class="uk-input" type="text" value=city}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">State</span>
+            {{input class="uk-input" type="text" value=state}}
+          </div>
+        </div>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Zip code</span>
+            {{input class="uk-input" type="text" value=zipcode}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Country</span>
+            {{input class="uk-input" type="text" value=country}}
+          </div>
+        </div>
+        <div>
+          <span class="uk-text-small">Phone Number</span>
+          {{input class="uk-input" type="text"  value=phoneNumber}}
+        </div>
+        <div class="uk-margin-small-top uk-text-center">
+          <button class="uk-button uk-button-default uk-text-primary">save</button>
+          <button {{action 'shippingModalHide'}} class="uk-button uk-button-default uk-text-danger">cancel</button>
+        </div>      
+      </form>
+    </div>
+  </div>
+</div>
+<div id="show-input-billing" uk-modal>
+  <div class="uk-modal-dialog">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <div class="uk-modal-header">
+      <h2 class="uk-modal-title">Add address</h2>
+    </div>
+    <div class="uk-modal-body">
+      <form class="uk-margin-top" {{action 'createBilling' firstName lastName street1 street2 city state zipcode country phoneNumber on='submit'}}>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">First name</span>
+            {{input class="uk-input" type="text" value=firstName}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Last name</span>
+            {{input class="uk-input" type="text" value=lastName}}
+          </div>
+        </div>
+        <div>
+          <span class="uk-text-small">Street1</span>
+          {{input class="uk-input" type="text" value=street1}}
+        </div>
+        <div>
+          <span class="uk-text-small">Street2</span>
+          {{input class="uk-input" type="text" value=street2}}
+        </div>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">City</span>
+            {{input class="uk-input" type="text" value=city}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">State</span>
+            {{input class="uk-input" type="text" value=state}}
+          </div>
+        </div>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Zip code</span>
+            {{input class="uk-input" type="text" value=zipcode}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Country</span>
+            {{input class="uk-input" type="text" value=country}}
+          </div>
+        </div>
+        <div>
+          <span class="uk-text-small">Phone Number</span>
+          {{input class="uk-input" type="text"  value=phoneNumber}}
+        </div>
+        <div class="uk-margin-small-top uk-text-center">
+          <button class="uk-button uk-button-default uk-text-primary">save</button>
+          <button {{action 'billingModalHide'}} class="uk-button uk-button-default uk-text-danger">cancel</button>
+        </div>      
+      </form>
+    </div>
+  </div>
+</div>
+<div id="show-modify" uk-modal>
+  <div class="uk-modal-dialog">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <div class="uk-modal-header">
+      <h2 class="uk-modal-title">Edit address</h2>
+    </div>
+    <div class="uk-modal-body">
+      <form class="uk-margin-top" {{action 'editAddress' address.firstname address.lastname address.address1 address.address2 address.city address.state address.zipcode address.country address.phonenumber on='submit'}}>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">First name</span>
+            {{input class="uk-input" type="text" value=address.firstname}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Last name</span>
+            {{input class="uk-input" type="text" value=address.lastname}}
+          </div>
+        </div>
+        <div>
+          <span class="uk-text-small">Street1</span>
+          {{input class="uk-input" type="text" value=address.address1}}
+        </div>
+        <div>
+          <span class="uk-text-small">Street2</span>
+          {{input class="uk-input" type="text" value=address.address2}}
+        </div>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">City</span>
+            {{input class="uk-input" type="text" value=address.city}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">State</span>
+            {{input class="uk-input" type="text" value=address.state}}
+          </div>
+        </div>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Zip code</span>
+            {{input class="uk-input" type="text" value=address.zipcode}}
+          </div>
+          <div class="uk-width-1-2">
+            <span class="uk-text-small">Country</span>
+            {{input class="uk-input" type="text" value=address.country}}
+          </div>
+        </div>
+        <div>
+          <span class="uk-text-small">Phone Number</span>
+          {{input class="uk-input" type="text"  value=address.phonenumber}}
+        </div>
+        <div class="uk-margin-small-top uk-text-center">
+          <button class="uk-button uk-button-default uk-text-primary">save</button>
+          <button {{action 'editModalHide'}} class="uk-button uk-button-default uk-text-danger">cancel</button>
+        </div>      
+      </form>
+    </div>
+  </div>
+</div>
+<div id="modal-shipping-delete" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+    <h2 class="uk-modal-title">Notice</h2>
+    <p>Are you sure you want to delete this shipping address?</p>
+    <p class="uk-text-center">
+      <button {{action 'deleteShippingAddress'}} class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>
+      <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>          
+    </p>
+  </div>
+</div>
+<div id="modal-billing-delete" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+    <h2 class="uk-modal-title">Notice</h2>
+    <p>Are you sure you want to delete this billing address?</p>
+    <p class="uk-text-center">
+      <button {{action 'deleteBillingAddress'}} class="uk-button uk-button-primary uk-modal-close" type="button">Ok</button>
+      <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>          
+    </p>
+  </div>
+</div>

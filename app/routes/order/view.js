@@ -57,8 +57,11 @@ export default Route.extend({
   @action userSelect(model, item, select) {
     let metaCartItemsCount;
     let cancelCount;
+    let purchaseCount;
+    let selectedCount;
     if (select === "ok") {
       item.itemStatuses.purchaseOk = true;
+      item.itemStatuses.purchaseStatus = true;
     } else {
       item.itemCancel = true;
       item.cancelConfirm = "Canceled.";
@@ -66,14 +69,21 @@ export default Route.extend({
     model.save().then(res => {
       metaCartItemsCount = res.get('metaCartItems').length;
       cancelCount = res.get('metaCartItems').filterBy('itemCancel',true).length;
+      purchaseCount = res.get('metaCartItems').filterBy('itemStatuses.purchaseOk',true).length;
+      selectedCount = cancelCount + purchaseCount;
       if (metaCartItemsCount === cancelCount) {
         res.set('icon', 'red remove');
         res.set('reqCancel', true);
         return res.save();
+      } else if (metaCartItemsCount === selectedCount) {
+        if (purchaseCount > 0) {
+          res.set('icon', 'yellow hand paper');
+          return res.save();
+        } else { return true; }
       } else { return false; }
     }).then(res => {
       if (res !== false) {
-        console.log("All cancel");
+        console.log("All selected");
       }
     })
   },

@@ -1,4 +1,34 @@
+
 <header style="background-color: #2f80ed;" class="uk-margin-medium-bottom">
+  <div class="uk-container">
+    <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+      <div class="uk-width-auto">
+        {{#link-to 'cart'}}
+          <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo">
+        {{/link-to}}
+        <!-- <img style=""  class="uk-margin-medium-top uk-margin-medium-bottom" width="92" height="46" src="/images/logo.png" alt="9ple logo"> -->
+      </div>
+      <div class="uk-width-expand">
+        <button class="uk-button uk-button-default uk-align-right uk-margin-medium-top uk-margin-medium-bottom" type="button"><a href="" uk-icon="user"></a></button>
+        <div uk-dropdown>
+          <ul class="uk-nav uk-dropdown-nav">
+            {{#link-to 'account' tagName="li" activeClass="uk-active"}}
+              <a>My account</a>
+            {{/link-to}}
+            {{#link-to 'order' tagName="li" activeClass="uk-active"}}
+              <a>Order</a>
+            {{/link-to}}
+            <li class="uk-nav-divider"></li>
+            {{#link-to 'order' tagName="li" activeClass="uk-active"}}
+              <a {{action 'signOut'}}>Sign Out</a>
+            {{/link-to}}
+          </ul>
+        </div>
+      </div>
+    </div>  
+  </div>
+</header>
+<!-- <header style="background-color: #2f80ed;" class="uk-margin-medium-bottom">
   <div class="uk-container">
     <div class="uk-grid-small" uk-grid>
       <div class="uk-width-auto">
@@ -18,60 +48,58 @@
       </div>
     </div>  
   </div>
-</header>
+</header> -->
 <div class="uk-container uk-margin-xlarge-bottom">
   <div class="uk-text-bold uk-text-center uk-text-lead uk-margin-bottom">Cart</div>
-  <div uk-grid>
-    <div class="uk-width-3-5">
+  <div class="uk-child-width-expand@s" uk-grid>
+    <div class="uk-width-xxlarge">
       <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small">
         <span class="uk-text-lead">Cart items</span>
         <hr>
         {{#with session.currentUser.cart as |cart|}}
         {{#each cart.metaCartItems as |item|}}
-          {{#if item.selectedItem}}
-            <div class="uk-grid-small" uk-grid>
-              <div class="uk-width-auto">
-                <img class="uk-border-rounded" width="60" height="60" src={{item.image}}>
-                <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
-              </div>
-              <div class="uk-width-expand">
-                <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-expand">
-                    <a href={{item.linkToMarket}} target="_blank">
-                      <p class="uk-card-title uk-margin-remove-bottom"><h5>{{item.title}}</h5></p>
-                    </a>
-                  </div>
-                  <div class="uk-width-auto">
-                    <button {{action 'addToCart' item}} type="button" uk-close></button>
-                  </div>
+          <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+            <div class="uk-width-auto">
+              <img class="uk-border-rounded" width="60" height="60" src={{item.image}}>
+              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
+            </div>
+            <div class="uk-width-expand">
+              <div class="uk-grid-small" uk-grid>
+                <div class="uk-width-expand">
+                  <a href={{item.linkToMarket}} target="_blank">
+                    <p class="uk-card-title uk-margin-remove-bottom"><h5>{{item.title}}</h5></p>
+                  </a>
                 </div>
-                <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-auto">
-                    <b>By {{item.manufacturer}}</b>  
-                  </div>
-                  <div class="uk-width-expand uk-text-right" uk-grid>
-                    <div class="uk-width-1-2">
-                      <span>Qty &nbsp; : &nbsp; </span>
-                      <a {{action 'minus' item}} uk-icon="icon: chevron-down"></a>
-                      <span>{{item.quantity}}</span>
-                      <a {{action 'plus' item}} uk-icon="icon: chevron-up"></a>
-                    </div>
-                    <div class="uk-width-1-2">
-                      <span class="uk-text-bold">${{item.totalPrice}}</span>
-                    </div>
-                  </div>            
-                </div>
-                <div class="uk-margin-small-top">
-                  <form {{action 'saveOption' item on='submit'}}>
-                    {{input class="uk-input uk-width-medium" type="text" value=item.option placeholder="option"}}
-                    <button class="uk-button uk-button-default">update</button>
-                  </form>
-                  <span class="uk-text-meta">Please choose when you have options</span>
+                <div class="uk-width-auto">
+                  <button {{action 'showDeleteModal' cart item}} type="button" uk-close href="#modal-item-delete" uk-toggle></button>
                 </div>
               </div>
-            </div>      
-            <hr>
-          {{/if}}
+              <div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+                <div class="uk-width-auto">
+                  <b>By {{item.manufacturer}}</b>  
+                </div>
+                <div class="" uk-grid>
+                  <div class="">
+                    <span>Qty &nbsp; : &nbsp; </span>
+                    <a {{action 'minus' item}} uk-icon="icon: chevron-down"></a>
+                    <span>{{item.quantity}}</span>
+                    <a {{action 'plus' item}} uk-icon="icon: chevron-up"></a>
+                  </div>
+                  <div class="">
+                    <span class="uk-text-bold">${{item.totalPrice}}</span>
+                  </div>
+                </div>            
+              </div>
+              <div class="uk-margin-small-top">
+                <form {{action 'saveOption' item on='submit'}}>
+                  {{input class="uk-input uk-width-medium" type="text" value=item.option placeholder="option"}}
+                  <button class="uk-button uk-button-default">update</button>
+                </form>
+                <span class="uk-text-meta">Please choose when you have options</span>
+              </div>
+            </div>
+          </div>      
+          <hr>
         {{/each}}
         {{/with}}    
       </div>
@@ -99,11 +127,6 @@
                 </div>          
               </div>
               <div class="uk-width-auto uk-text-small">
-                <div class="uk-align-top uk-margin-small-bottom">
-                  <button {{action 'showDeleteModal' cart item}} class="uk-button uk-button-text uk-text-danger" href="#modal-item-delete" uk-toggle>
-                    delete
-                  </button>
-                </div>
                 <div class="uk-align-middle uk-margin-small-top">
                   <button {{action 'addToCart' item}} class="uk-button uk-button-text">select</button>
                 </div>        
@@ -115,7 +138,7 @@
         {{/with}}
       </div>
     </div>
-    <div class="uk-width-2-5">
+    <div class="">
       <div style="border: 1px solid #E6E6E6;" class="uk-card uk-card-default uk-card-body uk-padding-small">
         <h4 class="uk-card-title">Total {{selectedItemsCount}} item(s):</h4>
         <hr>
