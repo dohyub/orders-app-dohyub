@@ -108,34 +108,30 @@
         <span class="uk-text-lead">Favorite items</span>
         <span class="uk-text-meta uk-text-center">Please put the product in the cart.</span>
         <hr>
-        {{#with session.currentUser.cart as |cart|}}
-        {{#each cart.metaCartItems as |item|}}
-          {{#unless item.selectedItem}}
-            <div class="uk-grid-small" uk-grid>
-              <div class="uk-width-auto">
-                <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
-                <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
-              </div>
-              <div class="uk-width-expand">
-                <a href={{item.linkToMarket}} target="_blank">
-                  <p class="uk-card-title uk-margin-remove-bottom"><h5>{{item.title}}</h5></p>
-                </a>
-                <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-auto">
-                    <b>By {{item.manufacturer}}</b>  
-                  </div>        
-                </div>          
-              </div>
-              <div class="uk-width-auto uk-text-small">
-                <div class="uk-align-middle uk-margin-small-top">
-                  <button {{action 'addToCart' item}} class="uk-button uk-button-text">select</button>
+        {{#each model.favorite as |item|}}
+          <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-auto">
+              <img class="uk-border-circle" width="60" height="60" src={{item.image}}>
+              <img class="uk-align-center uk-margin-small-top" width="60" height="20" src="/images/{{item.market}}.svg">
+            </div>
+            <div class="uk-width-expand">
+              <a href={{item.linkToMarket}} target="_blank">
+                <p class="uk-card-title uk-margin-remove-bottom"><h5>{{item.title}}</h5></p>
+              </a>
+              <div class="uk-grid-small" uk-grid>
+                <div class="uk-width-auto">
+                  <b>By {{item.manufacturer}}</b>  
                 </div>        
-              </div>
-            </div>      
-            <hr>
-          {{/unless}}
+              </div>          
+            </div>
+            <div class="uk-width-auto uk-text-small">
+              <div class="uk-align-middle uk-margin-small-top">
+                <button {{action 'addToCart' item}} class="uk-button uk-button-text">select</button>
+              </div>        
+            </div>
+          </div>      
+          <hr>
         {{/each}}
-        {{/with}}
       </div>
     </div>
     <div class="">
