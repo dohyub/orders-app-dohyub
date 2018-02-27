@@ -34,7 +34,11 @@
       <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
         <span class="uk-margin-small-right" uk-icon="credit-card"></span>
         <span class="uk-text-lead">Payment Information</span>
-        <a {{action 'inputPayment'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+        {{#if inputPaymentView}}
+          <a {{action 'inputPaymentClose'}} class="uk-align-right uk-text-danger uk-margin-small-bottom" uk-icon="icon: minus-circle"></a>
+        {{else}}
+          <a {{action 'inputPayment'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+        {{/if}}  
         <hr>
         <ul uk-accordion>
           {{#each model.payments as |p|}}
@@ -98,7 +102,11 @@
       <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
         <span class="uk-margin-small-right" uk-icon="location"></span>
         <span class="uk-text-lead">Shipping Address</span>
-        <a {{action 'inputShippingAddress'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+        {{#if inputShippingAddressView}}
+          <a {{action 'inputShippingAddressClose'}} class="uk-align-right uk-text-danger uk-margin-small-bottom" uk-icon="icon: minus-circle"></a>
+        {{else}}
+          <a {{action 'inputShippingAddress'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+        {{/if}}
         <hr>
         <ul uk-accordion>
           {{#each model.shippings as |address|}}
@@ -154,8 +162,8 @@
               </div>
             </div>
             <div>
-              <span class="uk-text-small">Phone Number</span>
-              {{input class="uk-input" type="text" value=phoneNumber}}
+              <span class="uk-text-small">Phone Number</span><br>
+              {{intl-tel-input class="uk-input" number=phoneNumber}}
             </div>
             <div class="uk-margin-small-top uk-text-center">
               <button class="uk-button uk-button-default uk-text-primary">save</button>
@@ -168,7 +176,11 @@
       <div style="border: 1px solid #E6E6E6;" class="uk-box-shadow-small uk-padding-small uk-margin-bottom">
         <span class="uk-margin-small-right" uk-icon="location"></span>
         <span class="uk-text-lead">Billing Address</span>
-        <a {{action 'inputBillingAddress'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+        {{#if inputBillingAddressView}}
+          <a {{action 'inputBillingAddressClose'}} class="uk-align-right uk-text-danger uk-margin-small-bottom" uk-icon="icon: minus-circle"></a>
+        {{else}}
+          <a {{action 'inputBillingAddress'}} class="uk-align-right uk-text-primary uk-margin-small-bottom" uk-icon="icon: plus-circle"></a>
+        {{/if}}
         <hr>
         <ul uk-accordion>
           {{#each model.billings as |address|}}
@@ -224,8 +236,8 @@
               </div>
             </div>
             <div>
-              <span class="uk-text-small">Phone Number</span>
-              {{input class="uk-input" type="text" value=phoneNumber}}
+              <span class="uk-text-small">Phone Number</span><br>
+              {{intl-tel-input class="uk-input" number=phoneNumber}}
             </div>
             <div class="uk-margin-small-top uk-text-center">
               <button class="uk-button uk-button-default uk-text-primary">save</button>

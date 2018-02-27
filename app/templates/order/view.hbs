@@ -30,12 +30,14 @@
                 {{#unless item.itemStatuses}}
                   <button {{action 'requestIndividualCancel' model item}} class="uk-button uk-button-text uk-text-primary">cancel</button>
                 {{else}}
+                  {{#unless item.statusSelected}}
                   <select onchange={{action (route-action 'userSelect' model item) value="target.value"}}>
                     <option>Please select...</option>
                     <option value="ok">Purchase Ok</option>
                     <option value="cancel">order Cancel</option>
                   </select>
                   <!-- <button {{action 'userSelect' model item select}}>select</button> -->
+                  {{/unless}} 
                 {{/unless}}      
               {{/unless}}
             </p>

@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each model as |p|}}
+      {{#each model.payments as |p|}}
         <tr>
           <td>{{p.billTo.firstName}}</td>
           <td>{{p.payment.creditCard.cardNumber}}</td>
@@ -18,7 +18,8 @@
         </tr>
       {{/each}}
     </tbody>
-</table>
+    
+  </table>
 </div>
 <div id="show-input-payment" bg-close="false" uk-modal>
   <div class="uk-modal-dialog">

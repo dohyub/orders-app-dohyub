@@ -66,6 +66,7 @@ export default Route.extend({
       item.itemCancel = true;
       item.cancelConfirm = "Canceled.";
     }
+    item.statusSelected = true;
     model.save().then(res => {
       metaCartItemsCount = res.get('metaCartItems').length;
       cancelCount = res.get('metaCartItems').filterBy('itemCancel',true).length;
