@@ -26,11 +26,23 @@ export default Route.extend({
     const user = this.get('session.currentUser');
     const postUrl = "https://us-central1-npl-dev-fbbd9.cloudfunctions.net/anetProfile-getPayment/";
     const anetToken = user.get('anetUserToken');
-    return Ember.$.post(postUrl+"?customerProfileId="+anetToken).then(response => {
+    const payments = Ember.$.post(postUrl+"?customerProfileId="+anetToken).then(response => {
       return response.profile.paymentProfiles;
-    }).catch(err => {
-      console.log(err);
-    })
+    }).catch(err => { console.log(err); });
+    let cardInfo;
+    let cardNumber;
+    const requestInfo = this.get('session.currentUser.requests').then(res => {
+      cardInfo = res.filterBy('reqCancel',true);
+      cardNumber = cardInfo.map(function(i) {
+        if (i.get('paymentProfile')) {
+          return  i.get('paymentProfile').payment.creditCard.cardNumber;
+        }
+      });
+      return cardNumber;
+    });
+    return Ember.RSVP.hash({
+      user, payments, requestInfo
+    });
   },
   updatePaymentsList() {
     const user = this.get('session.currentUser');

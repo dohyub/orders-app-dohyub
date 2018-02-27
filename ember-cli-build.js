@@ -12,7 +12,10 @@ module.exports = function(defaults) {
       plugins: [
         'transform-object-rest-spread'
       ]
-    }
+    },
+    'ember-intl-tel-input': {
+      includeUtilsScript: true, // default to false
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated
