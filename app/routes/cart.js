@@ -5,7 +5,7 @@ export default Route.extend({
   model() {
     const user = this.get('session.currentUser');
     const cart = user.get('cart');
-    var url = "http://dev.nineple.com/api/getfavori?user="+user.email;
+    var url = "https://dev.nineple.com/api/getfavori?user="+user.email;
     const favorite = Ember.$.getJSON(url + "&callback=?").then(response => {
       return response;
     }).catch(err => {
@@ -20,7 +20,7 @@ export default Route.extend({
   },
   updateFavorite() {
     const user = this.get('session.currentUser');
-    var url = "http://dev.nineple.com/api/getfavori?user="+user.email;
+    var url = "https://dev.nineple.com/api/getfavori?user="+user.email;
     return Ember.$.getJSON(url + "&callback=?").then(response => {
       return response;
     }).catch(err => {
@@ -37,7 +37,7 @@ export default Route.extend({
     item.save();
   },
   @action deleteItem(cartRef, item) {
-    let url = "http://dev.nineple.com/api/updatefavori";
+    let url = "https://dev.nineple.com/api/updatefavori";
     let data = "?user="+item.get('email')+"&productid="+item.get('productId')+"&market="+item.get('market')+"&mode=outcart"
     return Ember.$.getJSON(url + data + "&callback=?").then(response => {
       return response;
@@ -66,8 +66,8 @@ export default Route.extend({
     })
   },
   @action addToCart(item) {
-    let url = "http://dev.nineple.com/api/updatefavori";
-    let data = "?user="+item.user_email+"&productid="+item.productid+"&market="+item.market+"&mode=incart"
+    let url = "https://dev.nineple.com/api/updatefavori";
+    let data = "?user="+item.user_email+"&productid="+item.productid+"&market="+item.market
     const user = this.get('session.currentUser');
     const cart = user.get('cart');
     let metaCart;
@@ -87,13 +87,16 @@ export default Route.extend({
       title: item.title
       // createdAt: moment(new Date()).format('YYYY-MM-DD hh:mm')
     };
-    return Ember.$.getJSON(url + data + "&callback=?").then(response => {
-      return response;
-    }).catch(err => {
-      console.log(err);
+    return Ember.$.getJSON(url + data + "&mode=incart" + "&callback=?").then(response => {
+      if (response.result_code === "00") { return; }
+      else {
+        throw response.result_text;
+      }
     }).then(() => {
+      debugger;
       return Ember.RSVP.hash({ user, cart });
     }).then(data => {
+      debugger;
       data.mci = this.get('store').createRecord('metaCartItem', favoriteItem);
       data.cart.get('metaCartItems').pushObject(data.mci);
       return Ember.RSVP.all([ data.mci.save(), data.cart.save() ]);
@@ -101,6 +104,9 @@ export default Route.extend({
       return this.updateFavorite();
     }).then(res => {
       return this.controller.set('model.favorite', res);
+    }).catch(err => {
+      console.log(err);
+      return Ember.$.getJSON(url + data + "&mode=outcart" + "&callback=?");
     })
   },
   @action toCheckout() {
